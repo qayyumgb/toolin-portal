@@ -4,13 +4,13 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToolService } from '../../../shared/services/tool.service';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
+import { routes } from '../../../app.routes';
+import { Route, Router } from '@angular/router';
 
 type addTool = {
 
   brand: string;
-  category1: string;
-  category2: string;
-  category3: string;
+  category: string;
   description: string;
   images: any
   hasInsurance: boolean
@@ -35,20 +35,18 @@ type addTool = {
 export class AddToolComponent implements OnInit {
   formtab: number = 1;
   dropdownList:any = [];
-  selectedItems:any = [];
+  selectedCategory:any = [];
   dropdownSettings:IDropdownSettings = {};
   addTool(tool: addTool) {
     console.log(tool)
   }
   newToolForm: FormGroup;
 
-  constructor(private fb: FormBuilder, private tools:ToolService) {
+  constructor(private fb: FormBuilder,private routes:Router, private tools:ToolService) {
 
     this.newToolForm = this.fb.group({
       brand: ['', Validators.required],
-      category1: ['',],
-      category2: ['',],
-      category3: ['',],
+      categories: [[''], Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
       images: [[]],
@@ -61,7 +59,7 @@ export class AddToolComponent implements OnInit {
       priceDaily: [0, Validators.required],
       priceMonthly: [0, Validators.required],
       priceWeekly: [0, Validators.required],
-      streetAddress: [''],
+      streetAddress: ['sdafasdf'],
       _geoloc:[{lat:0,lng:0}],
       isDeliveryAvailable:[false] ,
       isPublished:[false],
@@ -75,6 +73,7 @@ export class AddToolComponent implements OnInit {
       this.tools.add(this.newToolForm.value).subscribe({
         next: (data) => {
           console.log(data);
+          this.routes.navigate(['/tools']);
         },
         error: (error) => {
           console.error('There was an error!', error);
@@ -84,16 +83,30 @@ export class AddToolComponent implements OnInit {
     }  }
 
     onItemSelect(item: any) {
-      console.log(item);
+      if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
+        this.selectedCategory.push(item);
+      }
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
     }
     onSelectAll(items: any) {
-      console.log(items);
+      this.selectedCategory = items;
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
+    }
+    onItemDeSelect(item: any) {
+      this.selectedCategory = this.selectedCategory.filter((x:any) => x.item_id !== item.item_id);
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
     }
   ngOnInit(): void {
     this.getCategory();  }
 
 
-  category:any ;
+  category:{item_id:any, item_text:any}[] = [];
  getCategory(){
   this.tools.getCategory().subscribe((x:any[]) =>{
     this.category = x.map(x => {
@@ -102,7 +115,7 @@ export class AddToolComponent implements OnInit {
         item_text: x.name
       }
     });
-    console.log(x);
+    console.log(this.category);
     
   })
 
@@ -116,10 +129,7 @@ export class AddToolComponent implements OnInit {
     { item_id: 4, item_text: 'Navsari' },
     { item_id: 5, item_text: 'New Delhi' }
   ]
-  this.selectedItems = [
-    { item_id: 3, item_text: 'Pune' },
-    { item_id: 4, item_text: 'Navsari' }
-  ];
+
   this.dropdownSettings = {
     singleSelection: false,
     idField: 'item_id',

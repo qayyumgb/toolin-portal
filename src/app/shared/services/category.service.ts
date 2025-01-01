@@ -24,7 +24,7 @@ export class CategoryService implements BaseService{
     return this.http.patch(env.base+categoriesApi.getbyId, data)
   }
   delete(data: any) {
-    return this.http.get(env.base+categoriesApi.getbyId+data)
+    return this.http.delete(env.base+categoriesApi.getbyId+data)
   }
 
   
