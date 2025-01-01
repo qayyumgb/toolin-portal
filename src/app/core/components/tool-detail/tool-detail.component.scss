@@ -1,0 +1,45 @@
+
+
+.detail-imge-carousel{
+    .detail-imge-carousel-img{
+        width: 98%;
+        height: 400px;
+        object-fit: cover;
+        border-radius: 16px !important;
+    }
+}
+.detail-imge-carousel-sm{
+    .detail-imge-carousel-img-sm{
+        width:  60px;
+        height: 60px;
+        object-fit: cover;
+        border-radius: 6px !important;
+    }
+}
+.equipment-table-striped{
+    td{
+        padding: 10px;
+        font-size: 14px;
+    }
+}
+
+.price-list
+{
+    list-style: none;
+    padding: 0;
+}
+.avatar-square{
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #344767;
+    outline: 1px solid #344767;
+    border: 2px solid white;
+}
+
+.slider-outer2{
+    max-width: 300px;
+    margin: auto;
+}

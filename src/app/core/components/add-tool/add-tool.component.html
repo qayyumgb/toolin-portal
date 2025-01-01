@@ -1,0 +1,220 @@
+<div class="container ">
+    <div class="card ">
+        <div class="card-header px-lg-5 pt-lg-4">
+            <h4 class="pt-lg-3 heading-font ">Add Tools</h4>
+        </div>
+        <div class="card-body px-lg-5 pt-1">
+            <div class="row justify-content-center">
+                <div class="col-lg-3">
+                    <ul class=" step-file">
+                        @for (item of data; track $index) {
+                        <li (click)="changeTab($index+1)" class="stepper-item d-flex align-items-center gap-3"
+                            [class.active]="formtab > $index">
+                            <span class="stepper-icon">
+                                <i [class]="'fa ' +item.icon"></i>
+                            </span>
+                            <div class="stepper-content">
+                                <h6 class="stepper-name">{{item.name}}</h6>
+                                <p class="stepper-detail">{{item.detail}}</p>
+                            </div>
+                        </li>
+                        }
+
+
+                    </ul>
+                </div>
+                <div class="col-lg-9">
+                    <form class="row" [formGroup]="newToolForm">
+                        <div class="general" *ngIf="formtab == 1">
+                            <div class="form-group">
+                                <label for="" class=" fw-bold">Brand Name</label>
+                                <input type="text" formControlName="brand"
+                                    class="form-control form-control-lg rounded-0 "
+                                    [ngClass]="{'border-danger':newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched  }">
+
+                            </div>
+                            <div class="form-group">
+                                <label for="" class=" fw-bold">Brand Name</label>
+                                <ng-multiselect-dropdown 
+                                    [placeholder]="'custom placeholder'"
+                                    [settings]="dropdownSettings" 
+                                    [data]="category" 
+                                    [(ngModel)]="selectedItems"
+                                    (onSelect)="onItemSelect($event)" 
+                                    (onSelectAll)="onSelectAll($event)">
+                                </ng-multiselect-dropdown>
+                            </div>
+
+                            <!-- <div class="row mb-1">
+                                <div class="form-group col-lg-4" *ngIf="category?.category1">
+                                    <label for="" class=" fw-bold">Category-1</label>
+                                    <select name="" id="" formControlName="category1"
+                                        class="form-control form-control-lg rounded-0 ">
+                                        @for (item of category?.category1; track $index) {
+                                        <option [value]="item">{{item}}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-4" *ngIf="category?.category2">
+                                    <label for="" class=" fw-bold">Category-2</label>
+                                    <select name="" formControlName="category2" id=""
+                                        class="form-control form-control-lg rounded-0 ">
+                                        @for (item of category?.category2; track $index) {
+                                        <option [value]="item">{{item}}</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-4" *ngIf="category?.category3">
+                                    <label for="" class=" fw-bold">Category-3</label>
+                                    <select name="" formControlName="category3" id=""
+                                        class="form-control form-control-lg rounded-0 ">
+                                        @for (item of category?.category3; track $index) {
+                                        <option [value]="item">{{item}}</option>
+                                        }
+                                    </select>
+                                </div>
+
+                            </div> -->
+
+                            <div class="form-group">
+                                <label for="" class=" fw-bold"> Name</label>
+                                <input type="text" formControlName="name"
+                                    [ngClass]="{'border-danger':newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched }"
+                                    class="form-control form-control-lg rounded-0 ">
+                            </div>
+                            <div class="form-group">
+                                <label for="" class=" fw-bold"> Modal</label>
+                                <input type="text" formControlName="model"
+                                    [ngClass]="{'border-danger':newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched }"
+                                    class="form-control form-control-lg rounded-0 ">
+                            </div>
+                        </div>
+
+                        <div class="description" *ngIf="formtab == 2">
+                            <div class="form-group">
+                                <label for="" class=" fw-bold">Description</label>
+                                <app-editor-component [html]="newToolForm.get('description')?.value" [height]="270"
+                                    [whenInvalid]="newToolForm.get('description')?.invalid && newToolForm.get('description')?.touched ||newToolForm.get('description')?.value.length <10  && newToolForm.get('description')?.touched  "
+                                    (htmlChange)="getModal($event)"></app-editor-component>
+
+                            </div>
+                        </div>
+
+                        <div class="media" *ngIf="formtab == 3">
+                            <div class="form-group">
+                                <!-- <img [src]="previewUrl" *ngIf="previewUrl" alt="Image Preview" style="width: 50px; height: 50px; object-fit: cover;"  /> -->
+                                <div class="d-flex gap-3 flex image-preview">
+                                    @for (item of previewUrls; track $index) {
+
+                                    <div class="image-box">
+                                        <span (click)="removeImage($index)">
+                                            <i class="fa fa-times"></i>
+                                        </span>
+                                        <img [src]="item" *ngIf="previewUrls.length" alt="Image Preview" />
+                                    </div>
+                                    }
+                                </div>
+                                <label for="" class=" fw-bold">Tool Media</label>
+
+                                <input type="file" id="toolMedia" class="rounded-0 d-none "
+                                    (change)="onFileChange($event)">
+                                <label for="toolMedia" class="upload-media">
+                                    <div class=""><i class="fa fa-cloud-upload upload-icon"></i>
+                                        <h6 class="upload-note-title">Drop files here or click to upload.</h6>
+                                        <span class="upload-note">(This is just a demo dropzone. Selected files are
+                                            <strong>not</strong> actually uploaded.)</span>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="price" *ngIf="formtab == 4">
+                            <div class="other-wrapper2">
+                                <div class="form-group currency-input">
+                                    <label for="" class=" fw-bold">Daily Price</label>
+                                    <input type="number" formControlName="priceDaily"
+                                        class="form-control  form-control-lg rounded-0 ">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class=" fw-bold">Weely Price</label>
+                                    <input type="number" formControlName="priceWeekly"
+                                        class="form-control form-control-lg rounded-0 ">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class=" fw-bold">Monthly Price</label>
+                                    <input type="number" formControlName="priceMonthly"
+                                        class="form-control form-control-lg rounded-0 ">
+                                </div>
+                                <div class="form-group">
+                                    <label for="" class=" fw-bold">Market Value</label>
+                                    <input type="number" formControlName="marketValue"
+                                        class="form-control form-control-lg rounded-0 ">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="other" *ngIf="formtab == 5">
+                            <div class="other-wrapper">
+                                <div class="form-group mb-0">
+                                    <input type="checkbox" id="hasInsurance" formControlName="hasInsurance"
+                                        class="rounded-0 d-none custom-check-input">
+                                    <label for="hasInsurance" class=" custom-check-label fw-bold">
+                                        <i class="fa fa-ticket"></i>
+                                        <span>Do you have insurance for this tool?</span>
+                                    </label>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="checkbox" id="isOperatorAvailable"
+                                        formControlName="isOperatorAvailable"
+                                        class="rounded-0 d-none custom-check-input">
+                                    <label for="isOperatorAvailable" class=" custom-check-label fw-bold">
+                                        <i class="fa-calendar-check fa"></i>
+                                        <span>
+                                            Is operator available for this tool?
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="checkbox" id="isOwnerApproved" formControlName="isOwnerApproved"
+                                        class="rounded-0 d-none custom-check-input">
+                                    <label for="isOwnerApproved" class=" custom-check-label fw-bold">
+                                        <i class="fa fa-zap"></i>
+                                        <span>
+                                            Is owner approved for this tool?
+                                        </span>
+                                    </label>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="checkbox" id="isAvailable" formControlName="isAvailable"
+                                        class="rounded-0 d-none custom-check-input">
+                                    <label for="isAvailable" class=" custom-check-label fw-bold">
+                                        <i class="fa fa-bus"></i>
+                                        <span>
+                                            Is this tool available?
+                                        </span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer pt-0 px-lg-5 pb-lg-5">
+            <div class="d-flex justify-content-end gap-1">
+                <button *ngIf="formtab>1" class="btn btn-primary mb-0" (click)="changeTab(formtab-1)">
+                    <i class="fa fa-angle-double-left"></i> &nbsp;
+                    back
+                </button>
+                <button *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
+
+                    <i class="fa fa-angle-double-right"></i>
+                </button>
+                <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+
+                    <i class="fa fa-saves"></i> &nbsp;
+                    save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

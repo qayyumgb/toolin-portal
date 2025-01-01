@@ -1,0 +1,51 @@
+{
+  "name": "toolin-dashboard",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test"
+  },
+  "private": true,
+  "dependencies": {
+    "@angular-material-extensions/google-maps-autocomplete": "^16.4.0",
+    "@angular/animations": "^18.2.0",
+    "@angular/common": "^18.2.0",
+    "@angular/compiler": "^18.2.0",
+    "@angular/core": "^18.2.0",
+    "@angular/fire": "^18.0.1",
+    "@angular/forms": "^18.2.0",
+    "@angular/platform-browser": "^18.2.0",
+    "@angular/platform-browser-dynamic": "^18.2.0",
+    "@angular/router": "^18.2.0",
+    "@azure/msal-angular": "^3.1.0",
+    "@azure/msal-browser": "^3.28.0",
+    "angular-font-awesome": "^3.1.2",
+    "firebase": "^11.1.0",
+    "firebase-tools": "^13.28.0",
+    "ng-multiselect-dropdown": "^1.0.0",
+    "ngx-bootstrap": "^18.1.3",
+    "ngx-editor": "^18.0.0",
+    "ngx-google-places-autocomplete": "^2.0.5",
+    "ngx-owl-carousel-o": "^19.0.0",
+    "rxjs": "^7.8.1",
+    "sweetalert2": "^11.15.3",
+    "tslib": "^2.3.0",
+    "zone.js": "~0.14.10"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "^18.2.9",
+    "@angular/cli": "^18.2.9",
+    "@angular/compiler-cli": "^18.2.0",
+    "@types/jasmine": "~5.1.0",
+    "jasmine-core": "~5.2.0",
+    "karma": "~6.4.0",
+    "karma-chrome-launcher": "~3.2.0",
+    "karma-coverage": "~2.2.0",
+    "karma-jasmine": "~5.1.0",
+    "karma-jasmine-html-reporter": "~2.1.0",
+    "typescript": "~5.5.2"
+  }
+}
