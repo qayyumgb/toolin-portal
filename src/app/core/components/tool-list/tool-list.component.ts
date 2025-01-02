@@ -21,7 +21,7 @@ export class ToolListComponent implements OnInit {
   ngOnInit(): void {
     this.getAll();
   }
-  private getAll() {
+  private getAll() {debugger
     this.toolservices.getAll().subscribe({
       next: (data: any) => {
         this.toolList = data.data

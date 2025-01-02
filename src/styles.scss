@@ -25788,3 +25788,16 @@ screen and (-ms-high-contrast:active) {
         }
     }
 }
+
+alert.common-alert {
+  display: block;
+  max-width: 300px;
+  position: absolute;
+  z-index: 99;
+  right: 0;
+  top: 10px;
+  .alert{
+    font-size: 16px;
+    color: #000000e3;
+  }
+}
