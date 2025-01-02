@@ -4,12 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToolService } from '../../../shared/services/tool.service';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import { routes } from '../../../app.routes';
-import { Route, Router } from '@angular/router';
+import {  Router } from '@angular/router';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { UploadService } from '../../../shared/services/upload.service';
 import { AlertComponent } from 'ngx-bootstrap/alert';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { ActivatedRoute } from '@angular/router';
 
 type addTool = {
 
@@ -46,8 +46,10 @@ export class AddToolComponent implements OnInit, AfterViewInit {
     console.log(tool)
   }
   newToolForm: FormGroup;
+  toolId: string | null = null;
 
-  constructor(private fb: FormBuilder, private routes: Router, private tools: ToolService, private uploadService: UploadService) {
+
+  constructor(private fb: FormBuilder,private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService) {
 
     this.newToolForm = this.fb.group({
       brand: ['', Validators.required],
@@ -91,29 +93,45 @@ export class AddToolComponent implements OnInit, AfterViewInit {
     }
   }
 
-  onItemSelect(item: any) {
-    if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
-      this.selectedCategory.push(item);
+    onItemSelect(item: any) {
+      if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
+        this.selectedCategory.push(item);
+      }
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
     }
-    this.newToolForm.patchValue({
-      categories: this.selectedCategory.map((x: any) => { return x.item_id })
-    });
-  }
-  onSelectAll(items: any) {
-    this.selectedCategory = items;
-    this.newToolForm.patchValue({
-      categories: this.selectedCategory.map((x: any) => { return x.item_id })
-    });
-  }
-  onItemDeSelect(item: any) {
-    this.selectedCategory = this.selectedCategory.filter((x: any) => x.item_id !== item.item_id);
-    this.newToolForm.patchValue({
-      categories: this.selectedCategory.map((x: any) => { return x.item_id })
-    });
-  }
+    onSelectAll(items: any) {
+      this.selectedCategory = items;
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
+    }
+    onItemDeSelect(item: any) {
+      this.selectedCategory = this.selectedCategory.filter((x:any) => x.item_id !== item.item_id);
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x:any) => {return x.item_id})
+      });
+    }
+ 
+
   ngOnInit(): void {
     this.getCategory();
+    this.route.paramMap.subscribe(params => {
+      this.toolId = params.get('id');
+      this.tools.getbyId(this.toolId).subscribe({
+        next: (data) => {
+          console.log(data);
+          this.newToolForm.patchValue(data);
+        },
+        error: (error) => {
+          console.error('There was an error!', error);
+        }
+      });
+    });
   }
+  
+  
 
   @ViewChild('addresstext') addresstext!: ElementRef;
   autocomplete: google.maps.places.Autocomplete | undefined

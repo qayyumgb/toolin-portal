@@ -25788,3 +25788,19 @@ screen and (-ms-high-contrast:active) {
         }
     }
 }
+
+::-webkit-scrollbar {
+    width: 6px; 
+    height: 6px; 
+  }
+  
+  ::-webkit-scrollbar-track {
+    background-color: whitesmoke; 
+    border-radius: 10px;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background-color: gainsboro; 
+    border-radius: 10px;
+  }
+  

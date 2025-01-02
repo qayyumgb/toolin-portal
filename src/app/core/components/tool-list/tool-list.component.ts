@@ -1,33 +1,38 @@
 import { Component, OnInit } from '@angular/core';
 import { ToolService } from '../../../shared/services/tool.service';
-import { toolsDto } from '../../../constant/models/tools';
+import { paginationDto, toolsDto } from '../../../constant/models/tools';
 import { Route, Router, RouterLink } from '@angular/router';
 import { RippleModule } from '../../../constant/directive/ripple.directive';
 import Swal from 'sweetalert2';
+import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
 
 @Component({
   selector: 'app-tool-list',
   standalone: true,
-  imports: [RouterLink,  RippleModule],
+  imports: [RouterLink,  RippleModule, PaginationComponent],
   templateUrl: './tool-list.component.html',
   styleUrl: './tool-list.component.scss'
 })
 export class ToolListComponent implements OnInit {
   toolList: toolsDto[] | null = null
-
+  pagination:paginationDto ={
+    count:0,
+    limit:0,
+    offset:0,
+    totalPages:0
+  }
   constructor(private toolservices: ToolService, private route:Router) {
 
   }
   ngOnInit(): void {
     this.getAll();
   }
-  private getAll() {
-    this.toolservices.getAll().subscribe({
+  private getAll(page:any = 1) {
+    this.toolservices.getAll(page).subscribe({
       next: (data: any) => {
         this.toolList = data.data
-        console.log(this.toolList);
-        
-        console.log('Received data:', this.toolList);
+        this.pagination = data.pagination
+        console.log(data.pagination);        
       },
       error: (err) => {
         console.error('Error:', err);
@@ -73,5 +78,8 @@ delete(id:any){
   
 
 }
-  
+getPageChange(e:any){
+this.getAll(e);
+
+}
 }

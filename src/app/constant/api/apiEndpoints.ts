@@ -10,6 +10,7 @@ export const authEndpoints =
     getProfile:"user/profile",
     googleAuth:"auth/google",
     facebookAuth:"auth/facebook",
+    loginbyApi:"auth/login",
    
     
 } 

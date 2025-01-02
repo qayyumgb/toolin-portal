@@ -53,6 +53,10 @@ export const routes: Routes = [
                         path: "add",
                         component: AddToolComponent,
                     },
+                    {
+                        path: "edit/:id",
+                        component: AddToolComponent,
+                    },
                 ]
             },
             {
