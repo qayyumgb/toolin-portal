@@ -55,7 +55,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       brand: ['', Validators.required],
       categories: [[''], Validators.required],
       name: ['', Validators.required],
-      location: ['', Validators.required],
       description: ['', Validators.required],
       images: [[]],
       hasInsurance: [false],
@@ -73,15 +72,16 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       isPublished: [false],
     });
   }
-  AddToolHandler() {
+  AddToolHandler() {debugger
     this.newToolForm.patchValue({
-      images: ["https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1WNJMT1e93sFm6AThHWpPRQXwi_EvpoCWUFhCQ_SRiYt1fCm4rS3BbHezh3o8Ip2yXsM&usqp=CAU"]
+      images: this.previewUrls,
+      _geoloc:{lat: this.lat, lng: this.lng}
     })
     if (this.newToolForm.valid) {
       console.log(this.newToolForm.value);
       this.tools.add(this.newToolForm.value).subscribe({
         next: (data) => {
-          console.log(data);
+          console.log('tool added sucessfully',data);
           this.routes.navigate(['/tools']);
         },
         error: (error) => {
