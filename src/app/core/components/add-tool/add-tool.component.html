@@ -1,3 +1,9 @@
+<alert type="success" *ngIf="isUploadSucess" [dismissOnTimeout]="2000">
+  <strong>Images uploaded successfully!</strong>
+</alert>
+<alert type="danger" *ngIf="isUploadfailed" [dismissOnTimeout]="2000">
+  <strong>uploading failed please try again!</strong>
+</alert>
 <div class="container ">
     <div class="card ">
         <div class="card-header px-lg-5 pt-lg-4">
@@ -91,6 +97,11 @@
                                     [ngClass]="{'border-danger':newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched }"
                                     class="form-control form-control-lg rounded-0 ">
                             </div>
+                            <div class="form-group">
+                                <label for="" class=" fw-bold"> location</label>
+                                <input type="text" formControlName="location" #addresstext [(ngModel)]="value1" placeholder="Search by location"  class="form-control form-control-lg rounded-0 " [ngClass]="{'border-danger':newToolForm.get('location')?.invalid && newToolForm.get('location')?.touched }"/>
+                               
+                            </div>
                         </div>
 
                         <div class="description" *ngIf="formtab == 2">
@@ -110,16 +121,19 @@
                                     @for (item of previewUrls; track $index) {
 
                                     <div class="image-box">
-                                        <span (click)="removeImage($index)">
+                                        <span (click)="removeImage(item)">
                                             <i class="fa fa-times"></i>
                                         </span>
                                         <img [src]="item" *ngIf="previewUrls.length" alt="Image Preview" />
                                     </div>
                                     }
+                                    @if(uploading){
+                                      <strong>Uploading...</strong>
+                                    }
                                 </div>
                                 <label for="" class=" fw-bold">Tool Media</label>
 
-                                <input type="file" id="toolMedia" class="rounded-0 d-none "
+                                <input type="file" multiple id="toolMedia" class="rounded-0 d-none "
                                     (change)="onFileChange($event)">
                                 <label for="toolMedia" class="upload-media">
                                     <div class=""><i class="fa fa-cloud-upload upload-icon"></i>
