@@ -47,7 +47,11 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   }
   newToolForm: FormGroup;
   toolId: string | null = null;
-
+  @ViewChild('addresstext') addresstext!: ElementRef;
+  autocomplete: google.maps.places.Autocomplete | undefined
+  lat: any
+  lng: any;
+  isEditForm:boolean = false;
 
   constructor(private fb: FormBuilder,private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService) {
 
@@ -92,7 +96,9 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       console.log('Form is invalid');
     }
   }
-
+  EditToolHandler(){
+    console.log('edit tools here')
+  }
     onItemSelect(item: any) {
       if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
         this.selectedCategory.push(item);
@@ -117,12 +123,14 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.getCategory();
-    this.route.paramMap.subscribe(params => {
+    this.route.paramMap.subscribe(params => {debugger
       this.toolId = params.get('id');
+      this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
       this.tools.getbyId(this.toolId).subscribe({
         next: (data) => {
           console.log(data);
           this.newToolForm.patchValue(data);
+          this.previewUrls = data.images
         },
         error: (error) => {
           console.error('There was an error!', error);
@@ -133,10 +141,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   
   
 
-  @ViewChild('addresstext') addresstext!: ElementRef;
-  autocomplete: google.maps.places.Autocomplete | undefined
-  lat: any
-  lng: any
+  
   ngAfterViewInit(): void {
     if (typeof google !== 'undefined' && google.maps && google.maps.places) {
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);

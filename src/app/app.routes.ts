@@ -31,7 +31,7 @@ export const routes: Routes = [
                         component: OrderListComponent
                     },
                     {
-                        path: "details",
+                        path: "details/:id",
                         component: OrderDetailComponent,
                     },
                 ]

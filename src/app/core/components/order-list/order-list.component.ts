@@ -28,8 +28,8 @@ constructor(private orderServices: OrderService){}
     })
   }
 
-gotoDetail(){
-  this.router.navigate(['order/details'])
+gotoDetail(getItem:any){
+  this.router.navigate(['order/details/'+getItem.id])
 }
 orderProgress: any = [
 {

@@ -32,7 +32,7 @@ export class ToolListComponent implements OnInit {
       next: (data: any) => {
         this.toolList = data.data
         this.pagination = data.pagination
-        console.log(data.pagination);        
+        console.log('tools list data',data.pagination);        
       },
       error: (err) => {
         console.error('Error:', err);
@@ -55,7 +55,7 @@ delete(id:any){
     cancelButtonColor: "#d33",
     confirmButtonText: "Yes, remove it!"
   }).then((result) => {
-    if (result.isConfirmed) {
+    if (result.isConfirmed) {this.delete
       this.toolservices.delete(id).subscribe({
   
         next:(x:any) => {

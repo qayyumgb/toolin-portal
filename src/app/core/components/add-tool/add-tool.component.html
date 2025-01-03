@@ -7,7 +7,14 @@
 <div class="container ">
     <div class="card ">
         <div class="card-header px-lg-5 pt-lg-4">
-            <h4 class="pt-lg-3 heading-font ">Add Tools</h4>
+            
+            @if(isEditForm){
+              <h4 class="pt-lg-3 heading-font ">Edit Tool</h4>
+            }
+            @else{
+              <h4 class="pt-lg-3 heading-font ">Add Tool</h4>
+            }
+            
         </div>
         <div class="card-body px-lg-5 pt-1">
             <div class="row justify-content-center">
@@ -34,13 +41,14 @@
                         <div class="general" *ngIf="formtab == 1">
                             <div class="form-group">
                                 <label for="" class=" fw-bold">Brand Name</label>
+                              
                                 <input type="text" formControlName="brand"
                                     class="form-control form-control-lg rounded-0 "
                                     [ngClass]="{'border-danger':newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched  }">
 
                             </div>
                             <div class="form-group" *ngIf="category">
-                                <label for="" class=" fw-bold">Brand Name</label>
+                                <label for="" class=" fw-bold">Categories</label>
                                 <ng-multiselect-dropdown 
                                     [placeholder]="'Select Category'"
                                     [settings]="dropdownSettings" 
@@ -53,37 +61,6 @@
                                     (onSelectAll)="onSelectAll($event)">
                                 </ng-multiselect-dropdown>
                             </div>
-
-                            <!-- <div class="row mb-1">
-                                <div class="form-group col-lg-4" *ngIf="category?.category1">
-                                    <label for="" class=" fw-bold">Category-1</label>
-                                    <select name="" id="" formControlName="category1"
-                                        class="form-control form-control-lg rounded-0 ">
-                                        @for (item of category?.category1; track $index) {
-                                        <option [value]="item">{{item}}</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-4" *ngIf="category?.category2">
-                                    <label for="" class=" fw-bold">Category-2</label>
-                                    <select name="" formControlName="category2" id=""
-                                        class="form-control form-control-lg rounded-0 ">
-                                        @for (item of category?.category2; track $index) {
-                                        <option [value]="item">{{item}}</option>
-                                        }
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-4" *ngIf="category?.category3">
-                                    <label for="" class=" fw-bold">Category-3</label>
-                                    <select name="" formControlName="category3" id=""
-                                        class="form-control form-control-lg rounded-0 ">
-                                        @for (item of category?.category3; track $index) {
-                                        <option [value]="item">{{item}}</option>
-                                        }
-                                    </select>
-                                </div>
-
-                            </div> -->
 
                             <div class="form-group">
                                 <label for="" class=" fw-bold"> Name</label>
@@ -99,7 +76,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="" class=" fw-bold"> location</label>
-                                <input type="text" formControlName="_geoloc" #addresstext [(ngModel)]="value1" placeholder="Search by location"  class="form-control form-control-lg rounded-0 " [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }"/>
+                                <input type="text" formControlName="_geoloc" #addresstext placeholder="Search by location"  class="form-control form-control-lg rounded-0 " [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }"/>
                                
                             </div>
                         </div>
@@ -226,11 +203,22 @@
 
                     <i class="fa fa-angle-double-right"></i>
                 </button>
-                <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+               
+                @if(isEditForm){
+                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="EditToolHandler()">
+
+                    <i class="fa fa-saves"></i> &nbsp;
+                    Edit
+                </button>
+                }
+                @else{
+                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
                     save
                 </button>
+                }
+               
             </div>
         </div>
     </div>

@@ -22,7 +22,7 @@ export class ToolService {
     return this.http.post<toolsDto>(this.base + toolsEndpoints.getAll, tool);
   }
   getAll(offset:any =1): Observable<toolsDto[]> {
-    return this.http.get<toolsDto[]>(this.base + toolsEndpoints.getAll+"?limit=10&offset="+offset);
+    return this.http.get<toolsDto[]>(this.base + toolsEndpoints.getToolList+"?limit=10&offset="+offset);
   }
   getbyId(Id:any): Observable<toolsDto> {
     return this.http.get<toolsDto>(this.base + toolsEndpoints.getAll+"/"+Id);

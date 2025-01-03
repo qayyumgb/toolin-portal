@@ -1,6 +1,7 @@
 
 export const toolsEndpoints =  {
 getAll : "tool",
+getToolList : "tool/list",
 categories : "category/all"
 }
 
@@ -18,6 +19,7 @@ export const authEndpoints =
 
 export const orderApi = {
     getAll:"order/list",
+    getOrder:"order",
 }
 export const userApi = {
     getAll:"user/list",
