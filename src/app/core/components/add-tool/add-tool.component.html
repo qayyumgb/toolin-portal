@@ -21,7 +21,7 @@
                 <div class="col-lg-3">
                     <ul class=" step-file">
                         @for (item of data; track $index) {
-                        <li (click)="changeTab($index+1)" class="stepper-item d-flex align-items-center gap-3"
+                        <li  class="stepper-item d-flex align-items-center gap-3"
                             [class.active]="formtab > $index">
                             <span class="stepper-icon">
                                 <i [class]="'fa ' +item.icon"></i>
@@ -78,7 +78,6 @@
                             <div class="form-group">
                                 <label for="" class=" fw-bold"> location</label>
                                 <input type="text" formControlName="_geoloc" #addresstext placeholder="Search by location"  class="form-control form-control-lg rounded-0 " [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }"/>
-                               
                             </div>
                         </div>
 
