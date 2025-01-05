@@ -72,20 +72,22 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       priceDaily: [0, Validators.required],
       priceMonthly: [0, Validators.required],
       priceWeekly: [0, Validators.required],
-      streetAddress: ['sdafasdf'],
-      _geoloc: [{ lat: 0, lng: 0 }],
+      streetAddress: [''],
+      _geoloc: ['', Validators.required],
       isDeliveryAvailable: [false],
       isPublished: [false],
     });
   }
   AddToolHandler() {
-    debugger
     this.newToolForm.patchValue({
       images: this.previewUrls,
-      _geoloc: { lat: this.lat, lng: this.lng }
+      _geoloc: { lat: this.lat, lng: this.lng },
+      categories:this.selectedCategory.map((x:any) => x.item_id)
+
     })
     if (this.newToolForm.valid) {
-      if (this.newToolForm.get('id')?.value == null) {
+
+      if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "" ) {
         this.tools.add(this.newToolForm.value).subscribe({
           next: (data) => {
             console.log('tool added sucessfully', data);
@@ -134,20 +136,24 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
   }
-
+gettoolSub:any
 preSelectedCategory:any[] = []
   ngOnInit(): void {
     this.getCategory();
-    this.route.paramMap.subscribe(params => {
+    this.gettoolSub = this.route.paramMap.subscribe(params => {
       debugger
       this.toolId = params.get('id');
       this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
+     if (this.isEditForm) {
       this.tools.getbyId(this.toolId).subscribe({
         next: (data:any) => {
           this.newToolForm.patchValue(data);
           this.previewUrls = data.images
           this.preSelectedCategory = data.categories.map((x:any) => x.name)
-          this.getLocationName(data._geoloc.lat, data._geoloc.lng)
+          if (this.toolId) {
+            
+            this.getLocationName(data._geoloc.lat, data._geoloc.lng)
+          }
           console.log("this.preSelectedCategory",data);
           
         },
@@ -161,6 +167,7 @@ preSelectedCategory:any[] = []
           console.log("this.preSelectedCategory",this.category);
         }
       });
+     }
     });
   }
 
