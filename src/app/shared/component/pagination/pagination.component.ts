@@ -8,36 +8,24 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
   template: `
     <div class="d-flex justify-content-end">
       <nav aria-label="Page navigation mt">
-        <ul class="pagination news-pagination">
-          <li class="page-item cursor-pointer" (click)="getFirstPageOfNews(1)">
-            <a class="page-link p-2" aria-label="First">
-              <i class="fa-solid fa-angles-left"></i>
-            </a>
-          </li>
+        <ul class="pagination news-pagination align-items-center gap-3">
+          
           <li class="page-item cursor-pointer" [ngClass]="{'disabled': currentPage === 1}" (click)="getFirstPageOfNews(currentPage - 1)">
-            <a class="page-link p-2" aria-label="Previous">
-              <span class="fa fa-chevron-left"></span>
+            <a class="page-link p-2 gap-2" aria-label="Previous">
+              <span class="fa p-icon fa-chevron-left"></span>
+              <span class="p-text">  Previous  </span>
+
             </a>
           </li>
-          <ng-container *ngFor="let page of getPageNumbers; let i = index">
+          Page {{currentPage}} of {{totalPage}}
 
-            
-            <li  class="page-item cursor-pointer" [ngClass]="{'active': currentPage === page}" 
-            (click)="getFirstPageOfNews(page)">
-            <a class="page-link" *ngIf="page !== '...'">{{ page }}</a>
-            <span class="page-link" *ngIf="page === '...'">{{ page }}</span>
-          </li>
-        </ng-container>
           <li class="page-item cursor-pointer" [ngClass]="{'disabled': currentPage === totalPage}" (click)="getFirstPageOfNews(currentPage + 1)">
             <a class="page-link" aria-label="Next">
-              <span class="fa fa-chevron-right"></span>
+            <span class="p-text">  Next  </span>
+              <span  class="fa p-icon fa-chevron-right"></span>
             </a>
           </li>
-          <li class="page-item cursor-pointer" (click)="getFirstPageOfNews(totalPage)">
-            <a class="page-link" aria-label="Last">
-              <i class="fa-solid fa-angles-right"></i>
-            </a>
-          </li>
+          
         </ul>
       </nav>
     </div>
@@ -46,25 +34,25 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
     .news-pagination {
       .page-link {
         border-color: #b2b2b2;
-        border-radius: 5px;
         border-width: 1px;
-        width: 35px;
-        height: 35px;
+        width:auto;
+        border-radius:0  !important;
         display: flex;
         justify-content: center;
         align-items: center;
         font-weight: 500;
         color: #b2b2b2;
-      }
+        padding: 0.5rem 1rem !important;
+        span.p-text{
+        
 
-      .active {
-        .page-link {
-          background: linear-gradient(90deg, #f89100, #ff7417);
-          color: white;
-          border-color: var(--bs-primary);
+        }
+        span.p-icon{
+          width: auto;
         }
       }
 
+     
       .disabled {
         pointer-events: none;
         opacity: 0.6;
@@ -113,19 +101,19 @@ export class PaginationComponent implements OnInit {
     return pages;
   }
 
-  constructor() {}
+  constructor() { }
 
   ngOnInit(): void {
     this.totalPage = Math.ceil(this.count / 10);
   }
 
-  getFirstPageOfNews(id: number|string = 1) {
-   if (typeof id === 'number') {
-    if (id < 1) id = 1;
-    if (id > this.totalPage) id = this.totalPage;
-    this.currentPage = id;
-    this.pageChange.emit(id);
-    
-   }
+  getFirstPageOfNews(id: number | string = 1) {
+    if (typeof id === 'number') {
+      if (id < 1) id = 1;
+      if (id > this.totalPage) id = this.totalPage;
+      this.currentPage = id;
+      this.pageChange.emit(id);
+
+    }
   }
 }

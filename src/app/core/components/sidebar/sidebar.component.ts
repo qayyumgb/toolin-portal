@@ -57,7 +57,7 @@ navList:any = [
     title:"Category",
     route:"/cateogry",
     icon:"fa-tags",
-    role:"none"
+    role:"Admin"
   },
   {
     title:"User",

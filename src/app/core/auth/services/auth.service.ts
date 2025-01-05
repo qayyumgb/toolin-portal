@@ -91,13 +91,14 @@ export class AuthService {
       );
 
   }
-loginbyApi(){
-  return this.http.post(`${env.base}${authEndpoints.loginbyApi}`,{})
-}
+  loginbyApi() {
+    return this.http.post(`${env.base}${authEndpoints.loginbyApi}`, {})
+  }
   logout() {
     this.fireauth.signOut();
     localStorage.removeItem('authToken')
-      localStorage.removeItem('proifleDetail')
+    localStorage.removeItem('proifleDetail')
+    this.route.navigate(['/auth'])
   }
 
 
@@ -114,5 +115,5 @@ loginbyApi(){
     });
   }
 
-  
+
 }

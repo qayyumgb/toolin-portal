@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { OrderService } from '../../../shared/services/order.service';
 import { orderDto, orderReturnDto } from '../../../constant/models/order.dto';
 import { UtilityService } from '../../../shared/utilities/utility';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
-  imports: [ProgressBarComponent],
+  imports: [ProgressBarComponent, CommonModule],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })

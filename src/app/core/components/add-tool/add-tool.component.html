@@ -39,6 +39,7 @@
                 <div class="col-lg-9">
                     <form class="row" [formGroup]="newToolForm">
                         <div class="general" *ngIf="formtab == 1">
+                            <input type="hidden" name="" formControlName="id">
                             <div class="form-group">
                                 <label for="" class=" fw-bold">Brand Name</label>
                               
@@ -205,10 +206,10 @@
                 </button>
                
                 @if(isEditForm){
-                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="EditToolHandler()">
+                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
-                    Edit
+                    Update
                 </button>
                 }
                 @else{

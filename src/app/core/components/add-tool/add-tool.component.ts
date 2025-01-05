@@ -4,15 +4,16 @@ import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ToolService } from '../../../shared/services/tool.service';
 import { IDropdownSettings, NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
-import {  Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { UploadService } from '../../../shared/services/upload.service';
 import { AlertComponent } from 'ngx-bootstrap/alert';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 type addTool = {
-
+  id?: null | string
   brand: string;
   category: string;
   description: string;
@@ -32,7 +33,7 @@ type addTool = {
 @Component({
   selector: 'app-add-tool',
   standalone: true,
-  imports: [EditorComponentComponent, NgMultiSelectDropDownModule, CommonModule, ReactiveFormsModule, FormsModule,AngularFireStorageModule,AlertComponent,GoogleMapsModule],
+  imports: [EditorComponentComponent, NgMultiSelectDropDownModule, CommonModule, ReactiveFormsModule, FormsModule, AngularFireStorageModule, AlertComponent, GoogleMapsModule],
   templateUrl: './add-tool.component.html',
   styleUrl: './add-tool.component.scss'
 })
@@ -51,11 +52,12 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   autocomplete: google.maps.places.Autocomplete | undefined
   lat: any
   lng: any;
-  isEditForm:boolean = false;
+  isEditForm: boolean = false;
 
-  constructor(private fb: FormBuilder,private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService, private toast:ToastrService) {
 
     this.newToolForm = this.fb.group({
+      id:[""],
       brand: ['', Validators.required],
       categories: [[''], Validators.required],
       name: ['', Validators.required],
@@ -76,77 +78,103 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       isPublished: [false],
     });
   }
-  AddToolHandler() {debugger
+  AddToolHandler() {
+    debugger
     this.newToolForm.patchValue({
       images: this.previewUrls,
-      _geoloc:{lat: this.lat, lng: this.lng}
+      _geoloc: { lat: this.lat, lng: this.lng }
     })
     if (this.newToolForm.valid) {
-      console.log(this.newToolForm.value);
-      this.tools.add(this.newToolForm.value).subscribe({
-        next: (data) => {
-          console.log('tool added sucessfully',data);
-          this.routes.navigate(['/tools']);
-        },
-        error: (error) => {
-          console.error('There was an error!', error);
-        }
-      });
+      if (this.newToolForm.get('id')?.value == null) {
+        this.tools.add(this.newToolForm.value).subscribe({
+          next: (data) => {
+            console.log('tool added sucessfully', data);
+            this.routes.navigate(['/tools']);
+          },
+          error: (error) => {
+            console.error('There was an error!', error);
+          }
+        });
+      }
+      else{
+        this.tools.update(this.newToolForm.get('id')?.value, this.newToolForm.value).subscribe({
+          next: (data) => {
+            this.toast.success("")
+            this.routes.navigate(['/tools']);
+          },
+          error: (error) => {
+            console.error('There was an error!', error);
+          }
+        });
+      }
     } else {
       console.log('Form is invalid');
     }
   }
-  EditToolHandler(){
+  EditToolHandler() {
     console.log('edit tools here')
   }
-    onItemSelect(item: any) {
-      if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
-        this.selectedCategory.push(item);
-      }
-      this.newToolForm.patchValue({
-        categories: this.selectedCategory.map((x:any) => {return x.item_id})
-      });
+  onItemSelect(item: any) {
+    if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
+      this.selectedCategory.push(item);
     }
-    onSelectAll(items: any) {
-      this.selectedCategory = items;
-      this.newToolForm.patchValue({
-        categories: this.selectedCategory.map((x:any) => {return x.item_id})
-      });
-    }
-    onItemDeSelect(item: any) {
-      this.selectedCategory = this.selectedCategory.filter((x:any) => x.item_id !== item.item_id);
-      this.newToolForm.patchValue({
-        categories: this.selectedCategory.map((x:any) => {return x.item_id})
-      });
-    }
- 
+    this.newToolForm.patchValue({
+      categories: this.selectedCategory.map((x: any) => { return x.item_id })
+    });
+  }
+  onSelectAll(items: any) {
+    this.selectedCategory = items;
+    this.newToolForm.patchValue({
+      categories: this.selectedCategory.map((x: any) => { return x.item_id })
+    });
+  }
+  onItemDeSelect(item: any) {
+    this.selectedCategory = this.selectedCategory.filter((x: any) => x.item_id !== item.item_id);
+    this.newToolForm.patchValue({
+      categories: this.selectedCategory.map((x: any) => { return x.item_id })
+    });
+  }
 
+preSelectedCategory:any[] = []
   ngOnInit(): void {
     this.getCategory();
-    this.route.paramMap.subscribe(params => {debugger
+    this.route.paramMap.subscribe(params => {
+      debugger
       this.toolId = params.get('id');
       this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
       this.tools.getbyId(this.toolId).subscribe({
-        next: (data) => {
-          console.log(data);
+        next: (data:any) => {
           this.newToolForm.patchValue(data);
           this.previewUrls = data.images
+          this.preSelectedCategory = data.categories.map((x:any) => x.name)
+          this.getLocationName(data._geoloc.lat, data._geoloc.lng)
+          console.log("this.preSelectedCategory",data);
+          
         },
         error: (error) => {
           console.error('There was an error!', error);
+        },
+        complete: () => {
+          this.selectedCategory = this.category.filter((x:any) => this.preSelectedCategory.some(xx =>xx == x.item_text ))
+          console.log("this.preSelectedCategory",this.selectedCategory);
+          console.log("this.preSelectedCategory",this.preSelectedCategory);
+          console.log("this.preSelectedCategory",this.category);
         }
       });
     });
   }
-  
-  
 
-  
+
+
+
   ngAfterViewInit(): void {
+
+
     if (typeof google !== 'undefined' && google.maps && google.maps.places) {
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);
-      
+
       this.autocomplete.addListener("place_changed", () => {
+        debugger
         const place = this.autocomplete?.getPlace();
         console.log(place);
 
@@ -182,7 +210,26 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       this.clearLatLng();
     }
   }
+  
+  getLocationName(lat: number, lng: number): void {
+    const geocoder = new google.maps.Geocoder();
+    const latlng = { lat, lng };
 
+    geocoder.geocode({ location: latlng }, (results, status) => {
+      if (status === 'OK') {
+        if (results) {
+          console.log('Location name:', results[0].formatted_address);
+          this.newToolForm.patchValue({
+            _geoloc:results[0].formatted_address
+          })
+        } else {
+          console.log('No results found');
+        }
+      } else {
+        console.error('Geocoder failed due to:', status);
+      }
+    });
+  }
   category: { item_id: any, item_text: any }[] = [];
   getCategory() {
     this.tools.getCategory().subscribe((x: any[]) => {
@@ -293,31 +340,31 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   selectedFiles: File[] = [];
   previewUrls: (string | ArrayBuffer | null)[] = [];
   selectedFile!: File;
-  uploading:boolean = false
-  isUploadSucess:boolean = false;
-  isUploadfailed:boolean = false
+  uploading: boolean = false
+  isUploadSucess: boolean = false;
+  isUploadfailed: boolean = false
   onFileChange(event: Event) {
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       this.uploading = true
       this.selectedFiles = Array.from(fileInput.files);
-      console.log('files changes',fileInput)
+      console.log('files changes', fileInput)
 
       this.uploadService.uploadImages(this.selectedFiles, 'uploads')
-      .then( (urls) => {
-        this.previewUrls = [...this.previewUrls,...urls];
-         this.uploading = false;
-        console.log('Uploaded URLs:', this.previewUrls);
-        this.isUploadSucess = true;
-        this.isUploadfailed = false
-      },
-      (err) => {
-        console.error('Error uploading files:', err);
-         this.uploading = false;
-         this.isUploadfailed = true;
-         this.isUploadSucess = false
-      }
-    );
+        .then((urls) => {
+          this.previewUrls = [...this.previewUrls, ...urls];
+          this.uploading = false;
+          console.log('Uploaded URLs:', this.previewUrls);
+          this.isUploadSucess = true;
+          this.isUploadfailed = false
+        },
+          (err) => {
+            console.error('Error uploading files:', err);
+            this.uploading = false;
+            this.isUploadfailed = true;
+            this.isUploadSucess = false
+          }
+        );
 
     }
   }
