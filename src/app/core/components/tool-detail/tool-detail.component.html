@@ -114,24 +114,16 @@
                         <hr class="horizontal dark">
                         <h6 class="mb-2">Category</h6>
                         <div class="contacts-list">
-                            <div class="d-flex align-items-center mb-2 gap-2">
-                                <i class="fa-solid fa-layer-group mr-2"></i>
-                                <div>
-                                    <p class="mb-0 fs-7 fw-bold">{{data?.category1}}</p>
+                            @for (item of data?.categories; track $index) {
+                                <div class="d-flex align-items-center mb-2 gap-2">
+                                    <i class="fa-solid fa-layer-group mr-2"></i>
+                                    <div>
+                                        <p class="mb-0 fs-7 fw-bold">{{item.name}}</p>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2 gap-2">
-                                <i class="fa-solid fa-layer-group mr-2"></i>
-                                <div>
-                                    <p class="mb-0 fs-7 fw-bold">{{data?.category2}}</p>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center mb-2 gap-2">
-                                <i class="fa-solid fa-layer-group mr-2"></i>
-                                <div>
-                                    <p class="mb-0 fs-7 fw-bold"> {{data?.category3}}</p>
-                                </div>
-                            </div>
+                            }
+                            
+                           
                             <hr class="horizontal dark">
                             <h6 class="mb-2">Key Feature</h6>
                             <ul class="list-unstyled fs-7 d-flex flex-column gap-2">

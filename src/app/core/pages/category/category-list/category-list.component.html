@@ -34,9 +34,9 @@
                   
                     <td>
                         <div class="d-flex gap-2 justify-content-center">
-                            <button ripple class="d-flex ripple-primary align-items-center justify-content-center btn btn-outline-primary mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
+                            <a [routerLink]="'edit/'+item.id" ripple class="d-flex ripple-primary align-items-center justify-content-center btn btn-outline-primary mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
                                 <i class="fa cursor-pointer fa-pencil fs-7"></i>
-                            </button>
+                            </a>
                             <button (click)="delete(item)" ripple class="d-flex ripple-danger align-items-center justify-content-center btn btn-outline-danger mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
                                 <i class="fa cursor-pointer fa-trash-alt fs-9"></i>
                             </button>

@@ -1,32 +1,43 @@
-export interface toolsDto {
-    id: string
-    isAvailable: boolean,
-    description: string
-    isOperatorAvailable: boolean,
-    ownerId: string
-    createdOn: string
-    priceDaily: number,
-    mainImageIdx: number,
-    priceWeekly: number,
-    _geoloc: geoCordinates
-    insuranceId: string
-    isOwnerApproved: boolean,
-    model: string
-    brand: string
-    category2: string
-    category3: string
-    images: string[]
-    isPublished: boolean,
-    category1: string
-    marketValue: string
-    priceMonthly: number,
-    isDeliveryAvailable: boolean,
-    streetAddress: string
-    availableAfter: number,
-    name: string
-    availableBefore: number,
+export interface toolsDto  {
+    id:string,
+    brand:string,
+    name:string,
+    description:string,
+    images: string[],
     hasInsurance: boolean,
-    lowercase_name: string
+    isAvailable: boolean,
+    isOperatorAvailable: boolean,
+    isOwnerApproved: boolean,
+    marketValue:string
+    model:string
+    priceDaily:   string,
+    priceMonthly: string,
+    priceWeekly:  string,
+    streetAddress:string
+    isDeliveryAvailable: boolean,
+    isPublished: boolean,
+    lowercase_name:string
+    createdOn: {
+        "_seconds": 1735774802,
+        "_nanoseconds": 449000000
+    },
+    deletedAt: any,
+    owner: {
+        firstName:string
+        lastName:string
+        email:string
+        password:string
+        address:string
+        uid:string
+        createdAt:string
+        updatedAt:string
+        deletedAt:string
+        authMethod:string
+        role:string
+    },
+    _geoloc: geoCordinates,
+    categories: categories[]
+    updatedOn: dateTime
 }
 
 export interface geoCordinates { lng: number, lat: number }
@@ -40,5 +51,30 @@ export type paginationDto = {
 }
 
 
+export interface toollist{
+    data: toolsDto[]
+    pagination:paginationDto
+} 
 
+export interface categories 
+    {
+        name:string
+        image:string
+        description:string
+        createdBy: {
+            firstName:string
+            lastName:string
+            email:string
+            password:string
+            address:string
+            uid:string
+            createdAt:string
+            updatedAt:string
+            deletedAt:string
+            authMethod:string
+            role:string
+        },
+        createdOn: dateTime
+        updatedOn: dateTime
+    }
 

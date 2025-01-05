@@ -71,6 +71,10 @@ export const routes: Routes = [
                         path:"new",
                         component:AddCategoryComponent
                     },
+                    {
+                        path:"edit/:id",
+                        component:AddCategoryComponent
+                    },
                 ]
                 
             },

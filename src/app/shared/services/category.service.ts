@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService implements BaseService{
+export class CategoryService {
 
   constructor(private http:HttpClient) { }
   getById(id: string) {
@@ -18,10 +18,10 @@ export class CategoryService implements BaseService{
     return this.http.get<any[]>(env.base+categoriesApi.getAll)
   }
   create(name:string, image:string, description:string) {
-    return this.http.post(env.base+categoriesApi.create+`?name=${image}&image=${image}&description=${description}`, null)
+    return this.http.post(env.base+categoriesApi.create+`?name=${name}&image=${image}&description=${description}`, null)
   }
-  update(data: any) {
-    return this.http.patch(env.base+categoriesApi.getbyId, data)
+  update(id:string,data: any) {
+    return this.http.patch(env.base+categoriesApi.getbyId+id, data)
   }
   delete(data: any) {
     return this.http.delete(env.base+categoriesApi.getbyId+data)

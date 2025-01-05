@@ -32,18 +32,16 @@ export class ToolListComponent implements OnInit {
       next: (data: any) => {
         this.toolList = data.data
         this.pagination = data.pagination
-        console.log('tools list data',data.pagination);        
+        console.log(this.toolList);
+        
       },
       error: (err) => {
-        console.error('Error:', err);
       },
     })
   }
   showModal: boolean = true;
   showModalHandling() {
     this.route.navigate(['tools/add'])
-    
-    
   }
 delete(id:any){
   Swal.fire({
@@ -57,7 +55,6 @@ delete(id:any){
   }).then((result) => {
     if (result.isConfirmed) {this.delete
       this.toolservices.delete(id).subscribe({
-  
         next:(x:any) => {
           Swal.fire({
             icon: "success",

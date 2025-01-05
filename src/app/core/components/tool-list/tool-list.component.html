@@ -27,10 +27,10 @@
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category
                             </th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Brand</th>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Owner</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Price
                             </th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Quantity
-                            </th>
+                          
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
 
                         </tr>
@@ -52,17 +52,23 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="p-3"> {{item.category1}}</td>
+                            <td class="">
+                                <div class="p-3 d-flex gap-2 category-box">
+
+                                    @for (x of item.categories; track $index) {
+                                        <span class="badge bg-gradient-faded-primary rounded-0 ">{{x.name}}</span>
+                                    }
+                                </div>
+                            </td>
                             <td class="p-3"> {{item.brand}}</td>
+                            <td class="p-3"> {{item.owner.firstName +" "+ item.owner.lastName}}</td>
                             <td class="p-3 text-center">
                                 {{item.priceDaily}}
 
 
                                 
                             </td>
-                            <td class="p-3 text-center">
-                                45
-                            </td>
+                       
                             <td class="text-center fs-7 align-middle">
                                 <div class="d-flex gap-2">
                                     <button ripple routerLink="/tools/edit/{{item.id}}"

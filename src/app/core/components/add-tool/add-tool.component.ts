@@ -73,21 +73,22 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       priceMonthly: [0, Validators.required],
       priceWeekly: [0, Validators.required],
       streetAddress: [''],
-      _geoloc: ['', Validators.required],
+      _geoloc: [{ lat: 51.509865, lng: -0.118092 }],
       isDeliveryAvailable: [false],
       isPublished: [false],
     });
   }
+
   AddToolHandler() {
     this.newToolForm.patchValue({
       images: this.previewUrls,
       _geoloc: { lat: this.lat, lng: this.lng },
       categories:this.selectedCategory.map((x:any) => x.item_id)
-
     })
     if (this.newToolForm.valid) {
 
       if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "" ) {
+        this.newToolForm.removeControl('id')
         this.tools.add(this.newToolForm.value).subscribe({
           next: (data) => {
             console.log('tool added sucessfully', data);
@@ -144,39 +145,52 @@ preSelectedCategory:any[] = []
       debugger
       this.toolId = params.get('id');
       this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
-     if (this.isEditForm) {
+     if (this.toolId) {
       this.tools.getbyId(this.toolId).subscribe({
         next: (data:any) => {
           this.newToolForm.patchValue(data);
           this.previewUrls = data.images
           this.preSelectedCategory = data.categories.map((x:any) => x.name)
-          if (this.toolId) {
-            
-            this.getLocationName(data._geoloc.lat, data._geoloc.lng)
-          }
-          console.log("this.preSelectedCategory",data);
-          
+          this.tools.getCategory().subscribe((x: any[]) => {
+            this.category = x.map(x => {
+              return {
+                item_id: x.id,
+                item_text: x.name
+              }
+            });
+               
+          this.selectedCategory = this.category.filter((x:any) => this.preSelectedCategory.some(xx =>xx == x.item_text ))
+          console.log("this.preSelectedCategory",this.selectedCategory);
+          console.log("this.preSelectedCategory",this.preSelectedCategory);
+          console.log("this.preSelectedCategory",this.category);   
+          })
+              
         },
         error: (error) => {
           console.error('There was an error!', error);
         },
         complete: () => {
-          this.selectedCategory = this.category.filter((x:any) => this.preSelectedCategory.some(xx =>xx == x.item_text ))
-          console.log("this.preSelectedCategory",this.selectedCategory);
-          console.log("this.preSelectedCategory",this.preSelectedCategory);
-          console.log("this.preSelectedCategory",this.category);
+          
         }
       });
      }
     });
+
+    this.dropdownSettings = {
+      singleSelection: false,
+      idField: 'item_id',
+      textField: 'item_text',
+      selectAllText: 'Select All',
+      unSelectAllText: 'UnSelect All',
+      itemsShowLimit: 3,
+      allowSearchFilter: true
+    };
   }
 
 
 
 
   ngAfterViewInit(): void {
-
-
     if (typeof google !== 'undefined' && google.maps && google.maps.places) {
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);
 
@@ -191,8 +205,6 @@ preSelectedCategory:any[] = []
           this.clearLatLng();
         }
       });
-
-      // Listen for input changes to handle when the input is manually cleared (no place selected)
       this.addresstext.nativeElement.addEventListener('input', () => {
         if (!this.addresstext.nativeElement.value) {
           this.clearLatLng();
@@ -246,30 +258,7 @@ preSelectedCategory:any[] = []
           item_text: x.name
         }
       });
-      console.log(this.category);
-
     })
-
-
-
-
-    this.dropdownList = [
-      { item_id: 1, item_text: 'Mumbai' },
-      { item_id: 2, item_text: 'Bangaluru' },
-      { item_id: 3, item_text: 'Pune' },
-      { item_id: 4, item_text: 'Navsari' },
-      { item_id: 5, item_text: 'New Delhi' }
-    ]
-
-    this.dropdownSettings = {
-      singleSelection: false,
-      idField: 'item_id',
-      textField: 'item_text',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true
-    };
   }
   changeTab(e: number) {
     let goNext: boolean = false;

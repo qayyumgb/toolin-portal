@@ -86,32 +86,7 @@
     }
 }
 
-.upload-media {
-    margin-right: auto;
-    margin-left: auto;
-    padding: 50px;
-    border: 2px dashed var(--bs-primary);
-    border-radius: 15px;
-    -webkit-border-image: none;
-    -o-border-image: none;
-    border-image: none;
-    box-sizing: border-box;
-    min-height: 300px;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    text-align: center;
 
-    .upload-note {
-        font-weight: 300;
-    }
-
-    .upload-icon {
-        font-size: 4rem;
-    }
-}
 
 .custom-check-input {
     display: none;
