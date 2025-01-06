@@ -24,19 +24,19 @@
                         class="form-control form-control-lg rounded-0  d-none" accept="image/png, image/jpg, image/jpeg"
                         [ngClass]="{'border-danger':newCategoyrForm.get('image')?.invalid && newCategoyrForm.get('image')?.touched  }">
 
-                        <label for="category-image-upload" class="upload-media cate-img-up" style="background: url({{previewUrls}});">
+                        <label for="category-image-upload" class="upload-media cate-img-up uploading" style="background: url({{previewUrls}});">
                             <div *ngIf="!previewUrls" ><i 
-                                    class="fa fa-cloud-upload upload-icon"></i>
+                                    class="fa fa-cloud-upload upload-icon "></i>
+                                    <span class="loading" *ngIf="uploadingPrecessing"></span>
                                 <h6 class="upload-note-title">Drop files here or click to
-                                    upload.</h6><span class="upload-note">(This is just a demo
-                                    dropzone. Selected files are <strong >not</strong> actually
-                                    uploaded.)</span>
+                                    upload.</h6>
+                                    <span class="upload-note">Please ensure the file is in PNG, JPG, or JPEG format . Once selected, the image preview will be displayed here.</span>
                             </div>
                             <button class="" *ngIf="previewUrls" class="remove-img-btn">&times;</button>
                         </label>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="saveDisable">Save</button>
                 </div>
             </form>
         </div>

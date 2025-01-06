@@ -37,7 +37,11 @@ export class AddCategoryComponent {
   selectedFiles: File[] = [];
   previewUrls: string | null = null;
   selectedFile!: File;
+  uploadingPrecessing:boolean = false;
+  saveDisable:boolean = false;
   onFileChange(event: Event) {
+    this.saveDisable = true
+    this.uploadingPrecessing = true
     const fileInput = event.target as HTMLInputElement;
     if (fileInput.files && fileInput.files.length > 0) {
       this.selectedFiles = Array.from(fileInput.files);
@@ -47,6 +51,8 @@ export class AddCategoryComponent {
           this.newCategoyrForm.patchValue({
             imageLink: urls[0]
           })
+          this.uploadingPrecessing = false;
+          this.saveDisable =false;
           console.log('Uploaded URLs:', this.previewUrls);
         },
           (err) => {
@@ -71,7 +77,7 @@ export class AddCategoryComponent {
     })
   }
   addCategory() {
-    if (this.newCategoyrForm.valid) {
+    if (this.newCategoyrForm.valid && !this.uploadingPrecessing) {
       debugger
       if (this.newCategoyrForm.get("id")?.value == null) {
         this._service.create(
