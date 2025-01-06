@@ -142,7 +142,7 @@ preSelectedCategory:any[] = []
   ngOnInit(): void {
     this.getCategory();
     this.gettoolSub = this.route.paramMap.subscribe(params => {
-      debugger
+       
       this.toolId = params.get('id');
       this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
      if (this.toolId) {
@@ -195,7 +195,7 @@ preSelectedCategory:any[] = []
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);
 
       this.autocomplete.addListener("place_changed", () => {
-        debugger
+         
         const place = this.autocomplete?.getPlace();
         console.log(place);
 

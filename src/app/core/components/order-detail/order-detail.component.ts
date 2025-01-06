@@ -15,7 +15,7 @@ export class OrderDetailComponent implements OnInit {
   constructor(private route: ActivatedRoute,  private orderService: OrderService) {
   }
   ngOnInit(): void {
-    this.route.paramMap.subscribe(params => {debugger
+    this.route.paramMap.subscribe(params => { 
       this.orderId = params.get('id');
       this.orderService.getById(this.orderId).subscribe({
         next: (data) => {

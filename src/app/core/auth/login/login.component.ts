@@ -31,7 +31,7 @@ export class LoginComponent {
   login() {
     if (this.loginForm.valid && this.loginForm.value.email && this.loginForm.value.password) {
       this.authService.login(this.loginForm.value.email, this.loginForm.value.password).then(x => {
-        debugger
+         
         if(x){
           let token = x._tokenResponse.idToken
           localStorage.setItem("authToken", token)
@@ -56,7 +56,7 @@ export class LoginComponent {
           
         }
         
-        debugger
+         
         
         
       })

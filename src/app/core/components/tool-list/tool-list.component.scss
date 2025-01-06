@@ -25,6 +25,11 @@
 }
 
 .category-box{
-    overflow: auto;
+    overflow: hidden;
     max-width: 250px;
+    span{
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
 }

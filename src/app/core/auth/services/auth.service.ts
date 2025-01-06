@@ -103,7 +103,7 @@ export class AuthService {
 
 
   async getToken() {
-    debugger
+     
     this.afAuth.authState.subscribe(user => {
       if (user) {
         user.getIdToken().then(token => {

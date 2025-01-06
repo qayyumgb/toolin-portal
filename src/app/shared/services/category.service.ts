@@ -17,8 +17,8 @@ export class CategoryService {
   getAll(): Observable<any[]> {
     return this.http.get<any[]>(env.base+categoriesApi.getAll)
   }
-  create(name:string, image:string, description:string) {
-    return this.http.post(env.base+categoriesApi.create+`?name=${name}&image=${image}&description=${description}`, null)
+  create(data:any) {
+    return this.http.post(env.base+categoriesApi.create, data)
   }
   update(id:string,data: any) {
     return this.http.patch(env.base+categoriesApi.getbyId+id, data)

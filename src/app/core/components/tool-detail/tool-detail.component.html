@@ -8,7 +8,7 @@
                             <div class="slider-outer">
                                 <owl-carousel-o class="detail-imge-carousel nav-center-v detail-nav" #owlCar
                                     [options]="customOptions" (change)="getData($event)">
-                                    @for (item of imageList; track $index ) {
+                                    @for (item of data?.images; track $index ) {
                                     <ng-template carouselSlide [id]="'slide-'+$index">
                                         <img src="{{item}}" alt="image" class="img-fluid detail-imge-carousel-img">
                                     </ng-template>
@@ -18,7 +18,7 @@
                             <div class="slider-outer2">
                                 <owl-carousel-o class="detail-imge-carousel-sm nav-center-v " [options]="customOptions2"
                                     (change)="getData($event)">
-                                    @for (item of imageList; track $index ) {
+                                    @for (item of data?.images; track $index ) {
                                     <ng-template carouselSlide [id]="item">
                                         <img (click)="owlCar.to('slide-'+$index)" src="{{item}}" alt="image"
                                             class="img-fluid detail-imge-carousel-img-sm cursor-pointer">
@@ -35,7 +35,7 @@
                             </p>
 
                             <h6 class="mt-2"> Description</h6>
-                            <p class="fs-7">{{data?.description}}</p>
+                            <p class="fs-7" [innerHTML]="data?.description"></p>
                             <h6> Information</h6>
 
                             <table class="equipment-table-striped table lined tool-table table-lg">
@@ -136,7 +136,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="bg-primary text-white fw-bolder text-center p-3">
+                <!-- <div class="bg-primary text-white fw-bolder text-center p-3">
 
                     Technical specification
 
@@ -174,7 +174,7 @@
                             </tr>
                         </tbody>
                     </table>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>

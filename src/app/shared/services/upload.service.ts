@@ -9,7 +9,7 @@ export class UploadService {
   constructor(private storage: AngularFireStorage) {}
 
 
-  uploadImages(fileArray: File[], path: string): Promise<string[]> {debugger
+  uploadImages(fileArray: File[], path: string): Promise<string[]> { 
     const uploadPromises = fileArray.map((file) => this.uploadImage(file, path));
     return Promise.all(uploadPromises);
   }

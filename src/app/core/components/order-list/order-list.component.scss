@@ -26,5 +26,8 @@
     padding: 5px 1rem;
     border-radius: 5px;
     color: white;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
 }

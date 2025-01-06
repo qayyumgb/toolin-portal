@@ -56,7 +56,12 @@
                                 <div class="p-3 d-flex gap-2 category-box">
 
                                     @for (x of item.categories; track $index) {
-                                        <span class="badge bg-gradient-faded-primary rounded-0 ">{{x.name}}</span>
+                                        @if ($index < 2) {
+                                            <span class="badge bg-secondary rounded-0 " title="x.name">{{x.name}}</span>
+                                        }
+                                    }
+                                    @if (item.categories.length >2) {
+                                        <span>+{{item.categories.length - 2}}</span>
                                     }
                                 </div>
                             </td>

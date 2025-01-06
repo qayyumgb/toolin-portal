@@ -78,12 +78,14 @@ export class AddCategoryComponent {
   }
   addCategory() {
     if (this.newCategoyrForm.valid && !this.uploadingPrecessing) {
-      debugger
+       
       if (this.newCategoyrForm.get("id")?.value == null) {
         this._service.create(
-          this.newCategoyrForm.get('name')?.value,
-           this.newCategoyrForm.get('imageLink')?.value,
-          this.newCategoyrForm.get('description')?.value,
+          {
+            name: this.newCategoyrForm.get('name')?.value,
+            image: this.previewUrls || this.newCategoyrForm.get('imageLink')?.value,
+            description: this.newCategoyrForm.get('description')?.value,
+          }
         ).subscribe({
           next: x => {
             console.log(x)
