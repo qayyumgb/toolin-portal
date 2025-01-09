@@ -15,7 +15,7 @@ export class OrderService {
   getAll():Observable<orderReturnDto>{
     return this.http.get<orderReturnDto>(env.base+orderApi.getAll)
   }
-  getById(Id:any):Observable<orderReturnDto>{
-    return this.http.get<orderReturnDto>(env.base+orderApi.getOrder+"/"+Id)
+  getById(Id:any):Observable<any>{
+    return this.http.get<any>(env.base+orderApi.getOrder+"/"+Id)
   }
 }

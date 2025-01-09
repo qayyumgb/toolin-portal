@@ -1,16 +1,16 @@
 import { dateTime, geoCordinates, paginationDto } from "./tools"
 
-export interface orderDto {
-    id:string
-    subTotal:number
-    tax:number
+export interface orderdetail {
     grandTotal:number
-    shippingCharges:number
-    items: itemsDto[]
-    orderBy: orderDto
-    status:string,
+    id:string
     isActive: boolean,
     isPaid: boolean
+    items: itemsDto[]
+    orderBy: orderDto
+    shippingCharges:number
+    status:string,
+    subTotal:number
+    tax:number
 }
 export interface orderReturnDto {
     pagination: paginationDto,
