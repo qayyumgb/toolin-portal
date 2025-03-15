@@ -29,3 +29,7 @@ export const categoriesApi = {
     create:"category/create",
     getbyId:"category/",
 }
+
+export const paymentApi ={
+    payment:"payment/"
+}

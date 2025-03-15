@@ -1,10 +1,10 @@
-<div class="container py-4" *ngIf="orderDetails">
-  <div class="card p-lg-5">
+<div class="container py-4 px-3 px-md-4" *ngIf="orderDetails">
+  <div class="card p-lg-5 p-md-4 p-3">
     <div class="card-header p-3 pb-0">
       <div class="d-flex justify-content-between align-items-center">
         <div>
           <h4 class="heading-font">Order Details</h4>
-          <p class="text-sm mb-0">
+          <p class="text-sm ">
             Order no. <b>{{orderDetails.id}}</b> from <b>{{orderDetails.orderBy.createdAt | date :'MMM dd, YYYY HH:MM:a'}}</b>
           </p>
           <!-- <p class="text-sm">
@@ -71,8 +71,17 @@
         <div class="col-lg-5 col-md-6 col-12">
           <h6 class="mb-3">Payment details</h6>
           <div class="card card-body border card-plain border-radius-lg d-flex align-items-center flex-row">
-            <img class="w-10 me-3 mb-0"
+            <ng-container [ngSwitch]="cardinfo?.payment_method_details?.card.brand">
+            
+            <img class="w-8 me-3 mb-0" *ngSwitchCase="'visa'"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Visa_Inc._logo.svg/1280px-Visa_Inc._logo.svg.png" alt="logo">
+          
+           
+            <img class="w-10 me-3 mb-0" *ngSwitchDefault
               src="https://demos.creative-tim.com/soft-ui-dashboard-pro/assets/img/logos/mastercard.png" alt="logo">
+          
+           
+            </ng-container>
             <h6 class="mb-0">****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;****&nbsp;&nbsp;&nbsp;7852</h6>
             <button type="button"
               class="btn btn-icon-only btn-rounded btn-outline-secondary mb-0 ms-2 btn-sm d-flex align-items-center justify-content-center ms-auto"

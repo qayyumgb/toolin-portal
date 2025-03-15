@@ -1,0 +1,46 @@
+.avatar-user {
+    background: #ffaf713b;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #ff7615;
+    border-radius: 50px;
+    padding-left: 19px;
+    border: 1px solid #ffa50069;
+    overflow: hidden;
+
+    cursor: pointer;
+
+    img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+}
+
+.setting-log {
+    padding: 10px 0 !important;
+
+    li {
+        &:not(:first-child) {
+            cursor: pointer;
+
+            &:hover {
+                background-color: #ff76151c;
+            }
+
+        }
+        &:not(:last-child) {
+            border-bottom: 1px solid gainsboro;
+        }
+
+        padding: 7px 15px;
+
+        .fa {
+            font-size: 14px;
+        }
+
+    }
+}

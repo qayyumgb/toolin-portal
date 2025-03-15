@@ -1,22 +1,50 @@
-<div class="container">
-    <div class="card p-lg-5">
+<div class="container px-3 px-md-4">
+    <div class="card p-lg-5 p-md-4 p-3">
         <h4 class="heading-font">Add Category</h4>
 
         <div class="">
             <form class="row" [formGroup]="newCategoyrForm" (submit)="addCategory()">
                 <input type="hidden" formControlName="id">
-                <div class="form-group">
-                    <label for="" class=" fw-bold">Category Name</label>
-                    <input type="text" formControlName="name" class="form-control form-control-lg rounded-0 "
-                        [ngClass]="{'border-danger':newCategoyrForm.get('name')?.invalid && newCategoyrForm.get('name')?.touched  }">
-                    
+                <div class="row">
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class=" fw-bold">Category Name</label>
+                            <input type="text" formControlName="name" class="form-control form-control-lg rounded-0 "
+                                [ngClass]="{'border-danger':newCategoyrForm.get('name')?.invalid && newCategoyrForm.get('name')?.touched  }">
+
+                                @if (newCategoyrForm.get('name')?.invalid &&  newCategoyrForm.get('name')?.touched) {
+                                    <div  class="fs-9 text-danger position-absolute">
+                                        @if ( newCategoyrForm.get("name")?.hasError('required')) {
+                                            <small >
+                                                Please enter a category name
+                                            </small>
+                                        }
+                                    </div>
+
+                                }
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="" class=" fw-bold">Description</label>
+                            <input type="text" formControlName="description" class="form-control form-control-lg rounded-0 "
+                                [ngClass]="{'border-danger':newCategoyrForm.get('description')?.invalid && newCategoyrForm.get('description')?.touched  }">
+
+                                @if (newCategoyrForm.get('description')?.invalid && newCategoyrForm.get('description')?.touched ) {
+                                    <div  class="fs-9 text-danger position-absolute">
+                                        @if ( newCategoyrForm.get('description')?.hasError("required")) {
+                                            <small >
+                                                Please enter a category name
+                                            </small>
+                                        }
+                                    </div>
+
+                                }
+                        </div>
+                    </div>
                 </div>
                
-                <div class="form-group">
-                    <label for="" class=" fw-bold">Description</label>
-                    <input type="text" formControlName="description" class="form-control form-control-lg rounded-0 "
-                        [ngClass]="{'border-danger':newCategoyrForm.get('description')?.invalid && newCategoyrForm.get('description')?.touched  }">
-                </div>
+               
                 <div class="form-group">
                     <label for="" class=" fw-bold">Image</label>
                    
@@ -36,7 +64,12 @@
                         </label>
                 </div>
                 <div class="d-flex justify-content-end">
-                    <button type="submit" class="btn btn-primary" [disabled]="saveDisable">Save</button>
+                    <button type="submit" class="btn btn-primary" [disabled]="saveDisable || !newCategoyrForm.valid">Save
+                        @if (showLoader) {
+                            <span class="loader"></span>
+                        }
+
+                    </button>
                 </div>
             </form>
         </div>

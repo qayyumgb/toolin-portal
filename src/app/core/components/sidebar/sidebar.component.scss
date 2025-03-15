@@ -5,6 +5,7 @@
 
 
 .navbar-vertical {
+  @media (min-width:1024px) {
     &.navbar-expand-minify {
         max-width: 70px;
         padding: 10px;
@@ -39,6 +40,7 @@
             }
         }
     }
+  }
 
     &.navbar-expand-minify,
     &.navbar-expand-xs {
@@ -177,4 +179,10 @@
 }
 .navbar-vertical .nav-link .nav-link-text  {
     transition: unset  !important
+}
+
+@media (max-width:1024px) {
+.itsMobile{
+        z-index: 1000 !important;
+    }
 }

@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 })
 export class OrderDetailComponent implements OnInit {
   orderId: string | null = null;
+  cardinfo:any
   orderDetails:orderdetail|null = null
   constructor(private route: ActivatedRoute,  private orderService: OrderService) {
   }
@@ -24,6 +25,12 @@ export class OrderDetailComponent implements OnInit {
         next: (data) => {
           console.log('order-dertail',data);
           this.orderDetails = data;
+          this.orderService.paymentApi(data.id).subscribe({
+            next:(x)=>{
+              console.log(x)
+              this.cardinfo = x;
+            }
+          })
         },
         error: (error) => {
           console.error('There was an error!', error);

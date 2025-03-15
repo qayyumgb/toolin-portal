@@ -16,7 +16,7 @@ import { CommonModule } from '@angular/common';
 export class OrderListComponent implements OnInit {
 private router = inject(Router)
 protected util = inject(UtilityService)
-orderData:orderReturnDto | undefined
+orderData:any | undefined
 constructor(private orderServices: OrderService){}
   ngOnInit(): void {
     this.orderServices.getAll().subscribe({

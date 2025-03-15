@@ -19,7 +19,7 @@ export class AddCategoryComponent {
     this.newCategoyrForm = this.fb.group({
       id: [null],
       description: ['', Validators.required],
-      name: [''],
+      name: ['',Validators.required],
       imageLink: ["", Validators.required],
       image: [''],
     })
@@ -39,6 +39,7 @@ export class AddCategoryComponent {
   selectedFile!: File;
   uploadingPrecessing:boolean = false;
   saveDisable:boolean = false;
+  showLoader:boolean = false;
   onFileChange(event: Event) {
     this.saveDisable = true
     this.uploadingPrecessing = true
@@ -80,6 +81,9 @@ export class AddCategoryComponent {
     if (this.newCategoyrForm.valid && !this.uploadingPrecessing) {
        
       if (this.newCategoyrForm.get("id")?.value == null) {
+        this.saveDisable =true;
+        this.showLoader =true;
+        
         this._service.create(
           {
             name: this.newCategoyrForm.get('name')?.value,
@@ -91,6 +95,8 @@ export class AddCategoryComponent {
             console.log(x)
             this.toast.success("Category is successfully added")
             this.router.navigate(['/cateogry'])
+            this.saveDisable= false;
+            this.showLoader = false;
           }
         }
         )

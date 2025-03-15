@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { env } from '../../../environments/environment';
-import { orderApi } from '../../constant/api/apiEndpoints';
+import { orderApi, paymentApi } from '../../constant/api/apiEndpoints';
 import { Observable } from 'rxjs';
 import { orderReturnDto } from '../../constant/models/order.dto';
 
@@ -17,5 +17,8 @@ export class OrderService {
   }
   getById(Id:any):Observable<any>{
     return this.http.get<any>(env.base+orderApi.getOrder+"/"+Id)
+  }
+  paymentApi(Id:any):Observable<any>{
+    return this.http.get<any>(env.base+paymentApi.payment+Id)
   }
 }

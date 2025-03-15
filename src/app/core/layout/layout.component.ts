@@ -13,7 +13,9 @@ import { SettingService } from '../../shared/services/setting.service';
   <app-sidebar></app-sidebar>
 
   <div [ngClass]="{'full-content': !isFullNav}" class="main-content ">
-
+    @if(isMobile){
+      <div class="side-bar-back-drp"></div>
+    }
     <app-main></app-main>
   </div>
 </div>
@@ -22,10 +24,12 @@ import { SettingService } from '../../shared/services/setting.service';
 })
 export class LayoutComponent {
   isFullNav: boolean = true;
+  isMobile: boolean = true;
   constructor(private setting: SettingService) {
 
   }
   ngOnInit(): void {
     this.setting.isFullNavbar().subscribe(x => this.isFullNav = x)
+    this.setting.getIsMobiel().subscribe(x => this.isMobile = x)
   }
 }

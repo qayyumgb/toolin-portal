@@ -1,0 +1,9 @@
+.side-bar-back-drp{
+    position: fixed;
+    overflow: hidden;
+    z-index: 990;
+    width: 100vw;
+    height: 100vh;
+    background-color: #0000004a;
+    backdrop-filter: blur(3px);
+}
