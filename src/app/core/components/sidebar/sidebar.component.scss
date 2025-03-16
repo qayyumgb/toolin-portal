@@ -3,7 +3,11 @@
     box-shadow: 0 20px 27px  #723802;
 }
 
-
+@media (min-width:1024px) {
+    .sidenav {
+       border-radius: 1rem;
+    }
+}
 .navbar-vertical {
   @media (min-width:1024px) {
     &.navbar-expand-minify {
