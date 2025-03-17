@@ -1,8 +1,11 @@
-<div class="container px-3 px-md-4">
+<div class="container-fluid py-4 px-2 px-sm-3 px-md-4">
     <div class="card p-lg-5 p-md-4 p-3">
-        <h4 class="heading-font"> Categories</h4>
-        <div class="d-flex justify-content-end  ">
-            <a routerLink="new" class="btn btn-primary">New Category</a>
+        <div class="d-flex justify-content-between flex-wrap">
+
+            <h4 class="heading-font"> Categories</h4>
+            <div class="d-flex justify-content-end  ">
+                <a routerLink="new" class="btn btn-primary">New Category</a>
+            </div>
         </div>
         <div class="table-responsive">
             <table class="table tool-table lined datatables-category-list ">
@@ -10,19 +13,22 @@
                     <tr>
                         <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Category</th>
                         <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Total Products &nbsp;</th> -->
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Description</th>
-                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">Actions</th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">Description
+                        </th>
+                        <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                            Actions</th>
                     </tr>
                 </thead>
                 <tbody>
+                    @if (categoryList.length>0) {
                     @for (item of categoryList; track $index) {
-            
+
                     <tr>
                         <td class="">
                             <div class="d-flex align-items-center gap-2">
                                 <div class="avatar-category avatar p-0">
-                                    <img [src]="item.image"
-                                        alt="Product-8" class="rounded-2 h-100" style="object-fit: cover;">
+                                    <img [src]="item.image" alt="Product-8" class="rounded-2 h-100"
+                                        style="object-fit: cover;">
                                 </div>
                                 <div class="d-flex flex-column justify-content-center">
                                     <span class="text-heading text-wrap fs-7 fw-bold">{{item.name}}</span>
@@ -33,23 +39,38 @@
                         <td>
                             <!-- <div class="text-sm-center">4186</div> -->
                             <div class="category-description">
-                                
+
                                 {{item.description}}
                             </div>
                         </td>
-                      
+
                         <td>
                             <div class="d-flex gap-2 justify-content-center">
-                                <a [routerLink]="'edit/'+item.id" ripple class="d-flex ripple-primary align-items-center justify-content-center btn btn-outline-primary mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
+                                <a [routerLink]="'edit/'+item.id" ripple
+                                    class="d-flex ripple-primary align-items-center justify-content-center btn btn-outline-primary mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
                                     <i class="fa cursor-pointer fa-pencil fs-7"></i>
                                 </a>
-                                <button (click)="delete(item)" ripple class="d-flex ripple-danger align-items-center justify-content-center btn btn-outline-danger mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
+                                <button (click)="delete(item)" ripple
+                                    class="d-flex ripple-danger align-items-center justify-content-center btn btn-outline-danger mb-0 p-0 avatar-sm avatar-sm btn-sm rounded-circle">
                                     <i class="fa cursor-pointer fa-trash-alt fs-9"></i>
                                 </button>
                             </div>
                         </td>
                     </tr>
-            
+
+                    }
+                    }
+                    @else {
+                    @for (item of [1,1,1,1,1,1,1,1]; track $index) {
+                    <tr>
+                        <td class="px-3 py-4 sk" colspan="6">
+                            <div class="d-flex align-items-center  gap-2">
+
+                            </div>
+                        </td>
+
+                    </tr>
+                    }
                     }
                 </tbody>
             </table>

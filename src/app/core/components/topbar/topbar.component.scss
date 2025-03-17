@@ -49,3 +49,33 @@
     border-radius: 1rem !important;
     }
 }
+
+.navbar-brand-img-sm{
+    width: 110px !important;
+}
+
+.searching-bar
+{
+    position: relative;
+    input{
+        padding-right: 37px;
+    }
+    input:focus ~ span{
+        background-color: red !important;
+    }
+    span{
+        position: absolute;
+        right: 1px;
+        background: white;
+        width: 32px;
+        height: calc(100% - 2px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 1px;
+        border-top-right-radius: 7px;
+        border-bottom-right-radius: 7px;
+        border-left: 1px solid #d2d6da;
+        cursor: pointer;
+    }
+}

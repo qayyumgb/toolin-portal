@@ -1,6 +1,7 @@
-<div class="container px-3 px-md-4">
+<div class="container-fluid py-4 px-2 px-sm-3 px-md-4">
     <div class="card p-lg-5 p-md-4 p-3">
         <h4 class="heading-font">Users</h4>
+       <div class="table-responsive">
         <table class="table tool-table lined datatables-user-list">
             <thead>
                 <tr>
@@ -11,27 +12,42 @@
                 </tr>
             </thead>
             <tbody>
+               @if (userList?.data) {
                 @for (item of userList?.data; track $index) {
-                <tr>
-                    <td class="p-3">
-                        <div class="d-flex align-items-center gap-2">
-                            <img class="avatar-sm rounded-circle"
-                                src="https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/2.png"
-                                alt="Avatar">
-                            <div class="d-flex flex-column">
-                                <h5 class="fs-7 mb-0">{{item.firstName +" "+ item.lastName}}</h5>
-        
-                                <small class="fs-8">{{item.email}}</small>
+                    <tr>
+                        <td class="p-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img class="avatar-sm rounded-circle"
+                                    src="https://demos.pixinvent.com/vuexy-html-admin-template/assets/img/avatars/2.png"
+                                    alt="Avatar">
+                                <div class="d-flex flex-column">
+                                    <h5 class="fs-7 mb-0">{{item.firstName +" "+ item.lastName}}</h5>
+            
+                                    <small class="fs-8">{{item.email}}</small>
+                                </div>
                             </div>
-                        </div>
-                    </td>
-                    <td class="text-center fs-7 align-middle"><span>{{item.role}}</span></td>
-                    <td class="text-center fs-7 align-middle"><span>{{item.createdAt | date:"MMM dd, YYYY-hh:mm a"}}</span></td>
-                    <td class="text-center fs-7 align-middle"><span>{{item.address}}</span></td>
-                  
-                </tr>
-                }
+                        </td>
+                        <td class="text-center fs-7 align-middle"><span>{{item.role}}</span></td>
+                        <td class="text-center fs-7 align-middle"><span>{{item.createdAt | date:"MMM dd, YYYY-hh:mm a"}}</span></td>
+                        <td class="text-center fs-7 align-middle"><span>{{item.address}}</span></td>
+                      
+                    </tr>
+                    }
+               }
+                @else {
+                    @for (item of [1,1,1,1,1,1,1,1]; track $index) {
+                    <tr>
+                        <td class="px-3 py-4 sk" colspan="6">
+                            <div class="d-flex align-items-center  gap-2">
+                              
+                            </div>
+                        </td>
+                        
+                    </tr>
+                    }
+                    }
             </tbody>
         </table>
+       </div>
     </div>
 </div>

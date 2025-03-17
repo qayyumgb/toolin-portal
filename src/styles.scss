@@ -101,6 +101,7 @@ body {
 
 .heading-font {
     font-family: "Saira Condensed", sans-serif;
+    
 
 }
 
@@ -20685,7 +20686,7 @@ fieldset:disabled .btn {
 }
 
 .card .card-header {
-    padding: 1.5rem
+    padding: 0rem
 }
 
 .card .card-body {
@@ -22311,7 +22312,7 @@ hr.horizontal.gray-light {
     display: block
 }
 
-@media (min-width:1200px) {
+@media (min-width:992px) {
     .sidenav:hover {
         max-width: 15.625rem
     }
@@ -22371,7 +22372,7 @@ hr.horizontal.gray-light {
     opacity: 1
 }
 
-@media (max-width:1199.98px) {
+@media (max-width:991.98px) {
     .g-sidenav-show.rtl .sidenav {
         transform: translateX(17.125rem)
     }
@@ -25547,6 +25548,7 @@ screen and (-ms-high-contrast:active) {
 .custom-eidtor {
     .NgxEditor {
         height: inherit;
+        overflow: auto;
 
         .ProseMirror.NgxEditor__Content {
             height: inherit;
@@ -25849,7 +25851,7 @@ alert.common-alert {
 }
 
 .toast-message {
-    font-size: 14px;
+    font-size: 13px;
 }
 
 
@@ -25882,5 +25884,17 @@ alert.common-alert {
     100% {
         box-shadow: 14px 0 #ffffff22, -14px 0 #ffffff;
         background: #ffffff
+    }
+}
+
+.toast-title{
+    line-height: 0.8;
+}
+
+.not-selected-category{
+    .multiselect-dropdown{
+        .dropdown-btn {
+         border-color: var(--bs-red) !important;
+        }
     }
 }

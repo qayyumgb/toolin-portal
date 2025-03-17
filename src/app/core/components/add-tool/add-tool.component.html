@@ -4,15 +4,15 @@
 <alert type="danger" *ngIf="isUploadfailed" [dismissOnTimeout]="2000">
   <span>uploading failed please try again!</span>
 </alert>
-<div class="container ">
+<div class="container-fluid mt-4 ">
     <div class="card ">
         <div class="card-header px-lg-5 pt-lg-4">
             
             @if(isEditForm){
-              <h4 class="pt-lg-3 heading-font ">Edit Tool</h4>
+              <h4 class="pt-3 px-4 heading-font ">Edit Tool</h4>
             }
             @else{
-              <h4 class="pt-lg-3 heading-font ">Add Tool</h4>
+              <h4 class="pt-3 px-4 heading-font ">Add Tool</h4>
             }
             
         </div>
@@ -57,6 +57,7 @@
                                     [(ngModel)]="selectedCategory"
                                     [ngModelOptions]="{standalone: true}"
                                     class="tool-multi-select"
+                                    [ngClass]="{'not-selected-category':!iscategorySelected}"
                                     (onSelect)="onItemSelect($event)" 
                                     (onDeSelect)="onItemDeSelect($event)"
                                     (onSelectAll)="onSelectAll($event)">
@@ -203,27 +204,38 @@
         </div>
         <div class="card-footer pt-0 px-lg-5 pb-lg-5">
             <div class="d-flex justify-content-end gap-1">
-                <button *ngIf="formtab>1" class="btn btn-primary mb-0" (click)="changeTab(formtab-1)">
+                <button [disabled]="isLoading" *ngIf="formtab>1"  class="btn btn-primary mb-0" (click)="changeTab(formtab-1)">
                     <i class="fa fa-angle-double-left"></i> &nbsp;
+                  
                     back
                 </button>
-                <button *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
+                <button [disabled]="isLoading" *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
 
                     <i class="fa fa-angle-double-right"></i>
+                    @if (isLoading) {
+                        <div class="loader"></div>
+                    }
+                   
                 </button>
                
                 @if(isEditForm){
-                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+                  <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
                     Update
+                    @if (isLoading) {
+                        <div class="loader"></div>
+                    }
                 </button>
                 }
                 @else{
-                  <button *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+                  <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
                     save
+                    @if (isLoading) {
+                        <div class="loader"></div>
+                    }
                 </button>
                 }
                

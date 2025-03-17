@@ -20,7 +20,7 @@ import { loginDto } from '../../../constant/models/login.dto';
 })
 export class LoginComponent {
   route = inject(Router)
-
+  loging :boolean =false;
   constructor(private authService: AuthService,private toastr: ToastrService) {}
 
   loginForm = new FormGroup({
@@ -30,6 +30,7 @@ export class LoginComponent {
   loginReturn:loginDto|undefined
   login() {
     if (this.loginForm.valid && this.loginForm.value.email && this.loginForm.value.password) {
+      this.loging = true;
       this.authService.login(this.loginForm.value.email, this.loginForm.value.password).then(x => {
          
         if(x){
@@ -41,12 +42,16 @@ export class LoginComponent {
                 next: x => {
                   console.log(x);
                   this.loginReturn = x;
+                  this.loging = false;
                   localStorage.setItem("proifleDetail",JSON.stringify(this.loginReturn?.profile))
                   this.route.navigate(['/'])
     
                 },
                 error: x => {
-                  console.log('error is',x)},
+                  console.log('error is',x)
+                  this.loging = false;
+                },
+                
               })
             },
             error: x => {
@@ -62,6 +67,8 @@ export class LoginComponent {
       })
       .catch(error => {
         this.toastr.error('Invalid email or password', 'Error');
+        this.loging = false;
+
         // Handle login error (e.g., show an error message to the user)
       });
     }

@@ -11,6 +11,7 @@ import { AlertComponent } from 'ngx-bootstrap/alert';
 import { GoogleMapsModule } from '@angular/google-maps';
 import { ActivatedRoute } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UtilityService } from '../../../shared/utilities/utility';
 
 type addTool = {
   id?: null | string
@@ -41,8 +42,10 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   formtab: number = 1;
   dropdownList: any = [];
   selectedCategory: any = [];
+  iscategorySelected: boolean = true;
   dropdownSettings: IDropdownSettings = {};
   value1: string = '';
+  isLoading: boolean = false;
   addTool(tool: addTool) {
     console.log(tool)
   }
@@ -54,10 +57,10 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   lng: any;
   isEditForm: boolean = false;
 
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService, private toast:ToastrService) {
+  constructor(private fb: FormBuilder, private getAddFromCord: UtilityService, private route: ActivatedRoute, private routes: Router, private tools: ToolService, private uploadService: UploadService, private toast: ToastrService) {
 
     this.newToolForm = this.fb.group({
-      id:[""],
+      id: [""],
       brand: ['', Validators.required],
       categories: [[''], Validators.required],
       name: ['', Validators.required],
@@ -83,31 +86,37 @@ export class AddToolComponent implements OnInit, AfterViewInit {
     this.newToolForm.patchValue({
       images: this.previewUrls,
       _geoloc: { lat: this.lat, lng: this.lng },
-      categories:this.selectedCategory.map((x:any) => x.item_id)
+      categories: this.selectedCategory.map((x: any) => x.item_id)
     })
     if (this.newToolForm.valid) {
-
-      if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "" ) {
+      this.isLoading = false;
+      if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "") {
         this.newToolForm.removeControl('id')
         this.tools.add(this.newToolForm.value).subscribe({
           next: (data) => {
-            console.log('tool added sucessfully', data);
+            this.toast.success("Tool successfully Added")
             this.routes.navigate(['/tools']);
           },
           error: (error) => {
             console.error('There was an error!', error);
+          },
+          complete: () => {
+            this.isLoading = false;
           }
         });
       }
-      else{
+      else {
+        this.isLoading = true;
+
         this.tools.update(this.newToolForm.get('id')?.value, this.newToolForm.value).subscribe({
           next: (data) => {
-            this.toast.success("")
+            this.toast.success("Tool successfully Update")
             this.routes.navigate(['/tools']);
           },
           error: (error) => {
             console.error('There was an error!', error);
-          }
+          },
+          complete: () => this.isLoading = false
         });
       }
     } else {
@@ -124,56 +133,73 @@ export class AddToolComponent implements OnInit, AfterViewInit {
     this.newToolForm.patchValue({
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
+    this.iscategorySelected = this.selectedCategory.length > 0;
+
   }
   onSelectAll(items: any) {
     this.selectedCategory = items;
     this.newToolForm.patchValue({
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
+    this.iscategorySelected = this.selectedCategory.length > 0;
+
   }
   onItemDeSelect(item: any) {
     this.selectedCategory = this.selectedCategory.filter((x: any) => x.item_id !== item.item_id);
     this.newToolForm.patchValue({
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
+    this.iscategorySelected = this.selectedCategory.length > 0;
+
   }
-gettoolSub:any
-preSelectedCategory:any[] = []
+  gettoolSub: any
+  preSelectedCategory: any[] = []
   ngOnInit(): void {
     this.getCategory();
+    this.newToolForm.patchValue({ _geoloc: "" })
+
     this.gettoolSub = this.route.paramMap.subscribe(params => {
-       
+
       this.toolId = params.get('id');
       this.isEditForm = this.route.snapshot.routeConfig?.path?.includes('edit') as any
-     if (this.toolId) {
-      this.tools.getbyId(this.toolId).subscribe({
-        next: (data:any) => {
-          this.newToolForm.patchValue(data);
-          this.previewUrls = data.images
-          this.preSelectedCategory = data.categories.map((x:any) => x.name)
-          this.tools.getCategory().subscribe((x: any[]) => {
-            this.category = x.map(x => {
-              return {
-                item_id: x.id,
-                item_text: x.name
-              }
+      if (this.toolId) {
+        this.tools.getbyId(this.toolId).subscribe({
+          next: (data: any) => {
+            debugger
+            this.newToolForm.patchValue(data);
+            this.newToolForm.patchValue({ _geoloc: "" })
+            this.getAddFromCord.getAddressFromCoordinates(data._geoloc.lat, data._geoloc.lng).subscribe({
+              next: (address) => {
+                this.newToolForm.patchValue({ _geoloc: address });
+              },
+              error: (error) => console.error("Error fetching address:", error),
             });
-               
-          this.selectedCategory = this.category.filter((x:any) => this.preSelectedCategory.some(xx =>xx == x.item_text ))
-          console.log("this.preSelectedCategory",this.selectedCategory);
-          console.log("this.preSelectedCategory",this.preSelectedCategory);
-          console.log("this.preSelectedCategory",this.category);   
-          })
-              
-        },
-        error: (error) => {
-          console.error('There was an error!', error);
-        },
-        complete: () => {
-          
-        }
-      });
-     }
+
+            this.previewUrls = data.images
+            this.preSelectedCategory = data.categories.map((x: any) => x.name)
+            this.tools.getCategory().subscribe((x: any[]) => {
+              this.category = x.map(x => {
+                return {
+                  item_id: x.id,
+                  item_text: x.name
+                }
+              });
+
+              this.selectedCategory = this.category.filter((x: any) => this.preSelectedCategory.some(xx => xx == x.item_text))
+              console.log("this.preSelectedCategory", this.selectedCategory);
+              console.log("this.preSelectedCategory", this.preSelectedCategory);
+              console.log("this.preSelectedCategory", this.category);
+            })
+
+          },
+          error: (error) => {
+            console.error('There was an error!', error);
+          },
+          complete: () => {
+
+          }
+        });
+      }
     });
 
     this.dropdownSettings = {
@@ -195,9 +221,10 @@ preSelectedCategory:any[] = []
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);
 
       this.autocomplete.addListener("place_changed", () => {
-         
+        debugger
         const place = this.autocomplete?.getPlace();
         console.log(place);
+        console.log(place?.formatted_address);
 
         if (place && place.geometry) {
           this.getPlaces(place);
@@ -229,7 +256,7 @@ preSelectedCategory:any[] = []
       this.clearLatLng();
     }
   }
-  
+
   getLocationName(lat: number, lng: number): void {
     const geocoder = new google.maps.Geocoder();
     const latlng = { lat, lng };
@@ -239,7 +266,7 @@ preSelectedCategory:any[] = []
         if (results) {
           console.log('Location name:', results[0].formatted_address);
           this.newToolForm.patchValue({
-            _geoloc:results[0].formatted_address
+            _geoloc: results[0].formatted_address
           })
         } else {
           console.log('No results found');
@@ -267,7 +294,8 @@ preSelectedCategory:any[] = []
         goNext = true;
         break;
       case 2:
-        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('name')?.valid ? true : false
+        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('name')?.valid && this.selectedCategory.length > 0 ? true : false;
+        this.iscategorySelected = this.selectedCategory.length > 0;
         break;
       case 3:
         goNext = this.newToolForm.get('description')?.valid ? true : false
@@ -344,24 +372,48 @@ preSelectedCategory:any[] = []
     if (fileInput.files && fileInput.files.length > 0) {
       this.uploading = true
       this.selectedFiles = Array.from(fileInput.files);
-      console.log('files changes', fileInput)
+      this.isLoading = true
 
       this.uploadService.uploadImages(this.selectedFiles, 'uploads')
         .then((urls) => {
           this.previewUrls = [...this.previewUrls, ...urls];
           this.uploading = false;
-          console.log('Uploaded URLs:', this.previewUrls);
           this.isUploadSucess = true;
           this.isUploadfailed = false
+          this.isLoading = false;
         },
           (err) => {
             console.error('Error uploading files:', err);
             this.uploading = false;
             this.isUploadfailed = true;
             this.isUploadSucess = false
+            this.isLoading = false
           }
         );
 
     }
   }
+
+
+
+  // getAddressFromCoordinates(lat: number, lng: number) {
+
+  //   const geocoder = new google.maps.Geocoder();
+  //   const latlng = new google.maps.LatLng(lat, lng);
+
+  //   geocoder.geocode({ location: latlng }, (results: any, status: any) => {
+  //     if (status === google.maps.GeocoderStatus.OK) {
+  //       if (results[0]) {
+  //         const formattedAddress = results[0].formatted_address;
+  //         console.log("Address:", formattedAddress);
+  //         this.newToolForm.patchValue({ _geoloc: formattedAddress })
+  //       } else {
+  //         console.error("No address found.");
+  //       }
+  //     } else {
+  //       console.error("Geocoder failed due to: " + status);
+  //     }
+  //   });
+  // }
+
 }
