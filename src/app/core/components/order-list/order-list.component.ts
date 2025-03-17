@@ -5,11 +5,13 @@ import { OrderService } from '../../../shared/services/order.service';
 import { orderDto, orderReturnDto } from '../../../constant/models/order.dto';
 import { UtilityService } from '../../../shared/utilities/utility';
 import { CommonModule } from '@angular/common';
+import { paginationDto } from '../../../constant/models/tools';
+import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
 
 @Component({
   selector: 'app-order-list',
   standalone: true,
-  imports: [ProgressBarComponent, CommonModule],
+  imports: [ProgressBarComponent, CommonModule, PaginationComponent],
   templateUrl: './order-list.component.html',
   styleUrl: './order-list.component.scss'
 })
@@ -19,18 +21,29 @@ protected util = inject(UtilityService)
 orderData:any | undefined
 constructor(private orderServices: OrderService){}
   ngOnInit(): void {
-    this.orderServices.getAll().subscribe({
+  this.getAll()
+  }
+  disablePagination:boolean = false;
+  pagination: paginationDto |null = null
+
+  getAll(page:number = 0){
+    this.orderServices.getAll(page).subscribe({
       next:(x:orderReturnDto) => {
         this.orderData = x;
+        this.pagination = x?.pagination;
+
         console.log(this.orderData);
         
       }
        
     })
   }
-
 gotoDetail(getItem:any){
   this.router.navigate(['order/details/'+getItem.id])
+}
+
+getPageChange(event:number){
+  this.getAll(event)
 }
 orderProgress: any = [
 {
@@ -118,4 +131,6 @@ orderProgress: any = [
       revenue: "$200,00"
     }
   ]
+
+
 }

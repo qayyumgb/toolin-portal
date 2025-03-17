@@ -5,11 +5,12 @@ import { Route, Router, RouterLink } from '@angular/router';
 import { RippleModule } from '../../../constant/directive/ripple.directive';
 import Swal from 'sweetalert2';
 import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
+import { NoDataFound } from '../../../shared/component/no-data-found/no-data-found.component';
 
 @Component({
   selector: 'app-tool-list',
   standalone: true,
-  imports: [RouterLink,  RippleModule, PaginationComponent],
+  imports: [RouterLink,  RippleModule, PaginationComponent,NoDataFound],
   templateUrl: './tool-list.component.html',
   styleUrl: './tool-list.component.scss'
 })

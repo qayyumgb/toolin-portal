@@ -48,6 +48,17 @@
                     }
             </tbody>
         </table>
+        @if (pagination ) {
+
+            <app-pagination  
+            [totalPage]="pagination.totalPages" 
+            [count]="pagination.count"
+            [bothDisable]="disablePagination" 
+            (pageChange)="getPageChange($event)"
+            ></app-pagination>
+        }
+
+
        </div>
     </div>
 </div>

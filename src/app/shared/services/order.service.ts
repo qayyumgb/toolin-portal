@@ -12,8 +12,8 @@ export class OrderService {
 
   constructor(private http:HttpClient) { }
 
-  getAll():Observable<orderReturnDto>{
-    return this.http.get<orderReturnDto>(env.base+orderApi.getAll)
+  getAll(page:number):Observable<orderReturnDto>{
+    return this.http.get<orderReturnDto>(env.base+orderApi.getAll+"?offset="+page)
   }
   getById(Id:any):Observable<any>{
     return this.http.get<any>(env.base+orderApi.getOrder+"/"+Id)

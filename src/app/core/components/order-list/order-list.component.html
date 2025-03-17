@@ -29,6 +29,7 @@
                     </thead>
                     <tbody>
                         @if (orderData?.data) {
+                            @if(orderData.data.length>0){
                             @for (item of orderData?.data; track $index) {
                                 <tr class=" text-xs text-bold cursor-pointer" (click)="gotoDetail(item)">
                                     <td class="">
@@ -78,6 +79,9 @@
         
                                 </tr>
                                 }
+                                }@else{
+                                    <img src="img/nodatafound.png" alt="">
+                                }
                         }
                         @else {
                             @for (item of [1,1,1,1,1,1,1,1]; track $index) {
@@ -94,6 +98,18 @@
                     </tbody>
                 </table>
             </div>
+
+            @if (pagination ) {
+
+              <div class="pt-3">
+                <app-pagination  
+                [totalPage]="pagination.totalPages" 
+                [count]="pagination.count"
+                [bothDisable]="disablePagination" 
+                (pageChange)="getPageChange($event)"
+                ></app-pagination>
+              </div>
+            }
         </div>
     </div>
 </div>

@@ -10,7 +10,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
       <nav aria-label="Page navigation mt">
         <ul class="pagination news-pagination align-items-center gap-3">
           
-          <li class="page-item cursor-pointer" [ngClass]="{'disabled': currentPage === 1}" (click)="getFirstPageOfNews(currentPage - 1)">
+          <li class="page-item cursor-pointer" 
+          [ngClass]="{'disabled': currentPage === 1 || bothDisable || prevDisable}" 
+          (click)="getFirstPageOfNews(currentPage - 1)">
             <a class="page-link p-2 gap-2" aria-label="Previous">
               <span class="fa p-icon fa-chevron-left"></span>
               <span class="p-text">  Previous  </span>
@@ -19,7 +21,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
           </li>
           Page {{currentPage}} of {{totalPage}}
 
-          <li class="page-item cursor-pointer" [ngClass]="{'disabled': currentPage === totalPage}" (click)="getFirstPageOfNews(currentPage + 1)">
+          <li class="page-item cursor-pointer" 
+          [ngClass]="{'disabled': currentPage === totalPage || bothDisable || nextDisable}" 
+          (click)="getFirstPageOfNews(currentPage + 1)">
             <a class="page-link" aria-label="Next">
             <span class="p-text">  Next  </span>
               <span  class="fa p-icon fa-chevron-right"></span>
@@ -64,6 +68,10 @@ export class PaginationComponent implements OnInit {
   @Input() totalPage: number = 1;
   @Input() count: number = 1;
   @Input() currentPage: number = 1;
+  @Input() nextDisable: boolean = false;
+  @Input() prevDisable: boolean = false;
+  @Input() bothDisable: boolean = false;
+
   @Output() pageChange = new EventEmitter<number>();
 
   get getPageNumbers(): (number | string)[] {

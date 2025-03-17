@@ -47,7 +47,7 @@ export type paginationDto = {
     count: number
     limit: number
     offset: number
-    totalPages?: number
+    totalPages: number
 }
 
 

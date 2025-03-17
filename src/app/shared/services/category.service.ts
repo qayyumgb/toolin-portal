@@ -14,8 +14,8 @@ export class CategoryService {
   getById(id: string) {
     return this.http.get(env.base+categoriesApi.getbyId+id)
   }
-  getAll(): Observable<any[]> {
-    return this.http.get<any[]>(env.base+categoriesApi.getAll)
+  getAll(page:number): Observable<any[]> {
+    return this.http.get<any[]>(env.base+categoriesApi.getAll+"?offset="+page)
   }
   create(data:any) {
     return this.http.post(env.base+categoriesApi.create, data)
