@@ -16,69 +16,69 @@ import { PaginationComponent } from '../../../shared/component/pagination/pagina
   styleUrl: './order-list.component.scss'
 })
 export class OrderListComponent implements OnInit {
-private router = inject(Router)
-protected util = inject(UtilityService)
-orderData:any | undefined
-constructor(private orderServices: OrderService){}
+  private router = inject(Router)
+  protected util = inject(UtilityService)
+  orderData: any | undefined
+  constructor(private orderServices: OrderService) { }
   ngOnInit(): void {
-  this.getAll()
+    this.getAll()
   }
-  disablePagination:boolean = false;
-  pagination: paginationDto |null = null
+  disablePagination: boolean = false;
+  pagination: paginationDto | null = null
 
-  getAll(page:number = 0){
+  getAll(page: number = 0) {
     this.orderServices.getAll(page).subscribe({
-      next:(x:orderReturnDto) => {
+      next: (x: orderReturnDto) => {
         this.orderData = x;
         this.pagination = x?.pagination;
 
         console.log(this.orderData);
-        
+
       }
-       
+
     })
   }
-gotoDetail(getItem:any){
-  this.router.navigate(['order/details/'+getItem.id])
-}
+  gotoDetail(getItem: any) {
+    this.router.navigate(['order/details/' + getItem.id])
+  }
 
-getPageChange(event:number){
-  this.getAll(event)
-}
-orderProgress: any = [
-{
-  title: "All Orders",
-  icon: "fa-cart-plus",
-  color: "primary",
-},
-{
-  title: "Pending",
-  icon: "fa-clock-o",
-  color: "warning",
-},
-{
-  title: "Canceled",
-  icon: "fa-times-circle",
-  color: "danger",
-},
-{
-  title: "Refunded",
-  icon: "fa-undo",
-  color: "info",
-},
-{
-  title: "Paid",
-  icon: "fa-check-circle",
-  color: "success",
-},
-{
-  title: "In Progress",
-  icon: "fa-refresh",
-  color: "info",
-},
+  getPageChange(event: number) {
+    this.getAll(event)
+  }
+  orderProgress: any = [
+    {
+      title: "All Orders",
+      icon: "fa-cart-plus",
+      color: "primary",
+    },
+    {
+      title: "Pending",
+      icon: "fa-clock-o",
+      color: "warning",
+    },
+    {
+      title: "Canceled",
+      icon: "fa-times-circle",
+      color: "danger",
+    },
+    {
+      title: "Refunded",
+      icon: "fa-undo",
+      color: "info",
+    },
+    {
+      title: "Paid",
+      icon: "fa-check-circle",
+      color: "success",
+    },
+    {
+      title: "In Progress",
+      icon: "fa-refresh",
+      color: "info",
+    },
 
 
-]
+  ]
   orderList: any = [
     {
       id: "#10421",

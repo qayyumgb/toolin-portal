@@ -15,16 +15,12 @@
                 <table class="table tool-table mb-0">
                     <thead>
                         <tr>
-                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Tools</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ">DATE</th>
-                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> STATUS
-                            </th>
-                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> CUSTOMER
-                            </th>
-                            <th
-                                class=" text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">
-                                Total Amount</th>
+                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Tools</th>
+                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">DATE</th>
+                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> STATUS </th>
+                            <th class=" text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> CUSTOMER</th>
+                            <th class=" text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">Total Amount</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -80,7 +76,22 @@
                                 </tr>
                                 }
                                 }@else{
-                                    <img src="img/nodatafound.png" alt="">
+                                   <tr>
+                                    <td colspan="6">
+                                        <div class="no-data-found">
+                                          <div class="align-items-center d-flex flex-column p-5">
+                                            <img src="img/nodata.png" alt="">
+                                            <h6 class="text-center text-primary mb-0">No Order Found</h6>
+                                            <p class="text-center">
+                                                <small>
+                                                    No orders placed recently. This page updates automatically.
+                                                </small>
+                                            </p>
+                                          </div>
+                                        </div>
+
+                                    </td>
+                                   </tr>
                                 }
                         }
                         @else {

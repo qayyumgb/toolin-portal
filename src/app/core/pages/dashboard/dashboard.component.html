@@ -34,23 +34,24 @@
           <div class="row">
             <div class="col-lg-6">
               <div class="d-flex flex-column h-100">
-                <p class="mb-1 pt-2 text-bold">Reliable Equipment for Every Project</p>
-                <h5 class="font-weight-bolder heading-font fs-3">Renting your Tools
+                <p class="mb-1 pt-2 text-bold">Equipment for every project.</p>
+                <h5 class="font-weight-bolder heading-font fs-3">Renting from Toolin:
                 </h5>
-                <p class="mb-5 fw-light">From excavator, bulldozers, cranes to forklift, you can rent out all kind of tools you have.</p>
+                <p class="mb-5 fw-light">
+                  From carpentry, to gardening, to earth moving, and more - Toolin connects you to your needs.
+                </p>
                 <a class="text-body btn btn-outline-primary  text-primary text-sm font-weight-bold mb-0 icon-move-right mt-auto" routerLink="/tools/add">
                   Add Tool
                 </a>
               </div>
             </div>
             <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-              <div class="bg-gradient-primary border-radius-lg h-100">
-                <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/shapes/waves-white.svg"
-                  class="position-absolute h-100 w-50 top-0 d-lg-block d-none" alt="waves">
-                <div class="position-relative d-flex align-items-center justify-content-center h-100">
+              <div class="bg-gradient-primary border-radius-lg h-100" style="background-image: url(/img/rocketmachine.jpg);background-size: cover;background-position: right;">
+                
+                <!-- <div class="position-relative d-flex align-items-center justify-content-center h-100">
                   <img class="w-100 position-relative z-index-2 pt-4" style="height: 190px;object-fit: contain;"
-                    src="/img/rocket-white.png" alt="rocket">
-                </div>
+                    src="/img/rocketmachine.jpg" alt="rocket">
+                </div> -->
               </div>
             </div>
           </div>
@@ -64,7 +65,7 @@
           <span class="mask bg-gradient-dark"></span>
           <div class="card-body position-relative z-index-1 d-flex flex-column h-100 p-3">
             <h5 class="text-white font-weight-bolder mb-4 pt-2 heading-font fs-3">Let your tools work for you</h5>
-            <p class="text-white">welcome to the nations largest online tool and equipment rental location</p>
+            <p class="text-white">Welcome to the nations largest online tool and equipment rental location</p>
             <a class="text-white text-sm font-weight-bold mb-0 icon-move-right mt-auto" routerLink="/tools">
               Visit More
               <i class="fa fa-chevron-right text-xxs text-sm ms-1" aria-hidden="true"></i>
@@ -81,232 +82,86 @@
         <div class="card-header pb-0">
           <div class="row">
             <div class="col-lg-6 col-7">
-              <h6 class="heading-font fs-5 pt-3">Current Sales</h6>
+              <h6 class="heading-font fs-5 pt-3">Current Order</h6>
               
             </div>
             
           </div>
         </div>
-        <div class="card-body px-0 pb-2">
+        <div class="card-body px-0 pt-0 pb-2">
           <div class="table-responsive">
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Companies</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Members</th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Budget
-                  </th>
-                  <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                    Completion</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">DATE</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center"> STATUS</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> CUSTOMER</th>
+                  <th class=" text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">Total Amount</th>
+
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-xd.svg"
-                          class="avatar avatar-sm me-3" alt="xd">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Soft UI XD Version</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Ryan Tompson">
-                        <img src="./img/team-1.jpg" alt="team1">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Romina Hadid">
-                        <img src="./img/team-2.jpg" alt="team2">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Alexander Smith">
-                        <img src="./img/team-3.jpg" alt="team3">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Jessica Doe">
-                        <img src="./img/team-4.jpg" alt="team4">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> $14,000 </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar></app-progress-bar>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img
-                          src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-atlassian.svg"
-                          class="avatar avatar-sm me-3" alt="atlassian">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Add Progress Track</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Romina Hadid">
-                        <img src="./img/team-2.jpg" alt="team5">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Jessica Doe">
-                        <img src="./img/team-4.jpg" alt="team6">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> $3,000 </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar [figure]="10"></app-progress-bar>
+                @if (orderData?.data) {
+                  @if(orderData.data.length>0){
+                  @for (item of orderData?.data; track $index) {
+                      <tr class=" text-xs  cursor-pointer" >
+                          
+                          <td class="py-2 text-bold"> {{item.id}}</td>
 
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img
-                          src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-slack.svg"
-                          class="avatar avatar-sm me-3" alt="team7">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Fix Platform Errors</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Romina Hadid">
-                        <img src="./img/team-3.jpg" alt="team8">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Jessica Doe">
-                        <img src="./img/team-1.jpg" alt="team9">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> Not set </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar [figure]="100" theme="success"></app-progress-bar>
+                          <td class=""> {{item.orderBy.createdAt | date :"MMM dd, YYYY "}}</td>
+                          <td class="text-center">
 
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img
-                          src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-spotify.svg"
-                          class="avatar avatar-sm me-3" alt="spotify">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Launch our Mobile App</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Ryan Tompson">
-                        <img src="./img/team-4.jpg" alt="user1">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Romina Hadid">
-                        <img src="./img/team-3.jpg" alt="user2">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Alexander Smith">
-                        <img src="./img/team-4.jpg" alt="user3">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Jessica Doe">
-                        <img src="./img/team-1.jpg" alt="user4">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> $20,500 </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar [figure]="100" theme="success"></app-progress-bar>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-jira.svg"
-                          class="avatar avatar-sm me-3" alt="jira">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Add the New Pricing Page</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Ryan Tompson">
-                        <img src="./img/team-4.jpg" alt="user5">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> $500 </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar theme="info" [figure]="25"></app-progress-bar>
 
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <div class="d-flex px-2 py-1">
-                      <div>
-                        <img
-                          src="https://demos.creative-tim.com/soft-ui-dashboard/assets/img/small-logos/logo-invision.svg"
-                          class="avatar avatar-sm me-3" alt="invision">
-                      </div>
-                      <div class="d-flex flex-column justify-content-center">
-                        <h6 class="mb-0 text-sm">Redesign New Online Shop</h6>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div class="avatar-group mt-2">
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Ryan Tompson">
-                        <img src="./img/team-1.jpg" alt="user6">
-                      </a>
-                      <a href="javascript:;" class="avatar avatar-xs rounded-circle" data-bs-toggle="tooltip"
-                        data-bs-placement="bottom" title="Jessica Doe">
-                        <img src="./img/team-4.jpg" alt="user7">
-                      </a>
-                    </div>
-                  </td>
-                  <td class="align-middle text-center text-sm">
-                    <span class="text-xs font-weight-bold"> $2,000 </span>
-                  </td>
-                  <td class="align-middle">
-                    <app-progress-bar  [figure]="75" theme="danger"></app-progress-bar>
+                              <div class="d-flex align-items-center justify-content-center px-3">
+                                
 
-                  </td>
-                </tr>
+                                  <b class="text-xxs" ngClass="{{!item.isPaid ?'text-danger  ':'text-success'}}">{{item.isPaid
+                                      ? "PAID" :"NOT PAID"}}</b>
+                              </div>
+                          </td>
+                          <td class="">
+                              <div class="d-flex align-items-center">
+
+                                  <span>{{item.orderBy.firstName + " "+ item.orderBy.lastName }}</span>
+                              </div>
+                          </td>
+
+                          <td class="text-center"> {{item.grandTotal}}</td>
+
+                      </tr>
+                      }
+                      }@else{
+                         <tr>
+                          <td colspan="6">
+                              <div class="no-data-found">
+                                <div class="align-items-center d-flex flex-column p-5">
+                                  <img src="img/nodata.png" alt="">
+                                  <h6 class="text-center text-primary mb-0">No Order Found</h6>
+                                  <p class="text-center">
+                                      <small>
+                                          No orders placed recently. This page updates automatically.
+                                      </small>
+                                  </p>
+                                </div>
+                              </div>
+
+                          </td>
+                         </tr>
+                      }
+              }
+              @else {
+                  @for (item of [1,1,1,1,1,1,1,1]; track $index) {
+                  <tr>
+                      <td class="px-3 py-4 sk" colspan="6">
+                          <div class="d-flex align-items-center  gap-2">
+                            
+                          </div>
+                      </td>
+                      
+                  </tr>
+                  }
+                  }
               </tbody>
             </table>
           </div>

@@ -1,33 +1,38 @@
-.progress-list-type
-{
+.progress-list-type {
     list-style: none;
     padding: 0%;
-    li{
+
+    li {
         display: flex;
         gap: 10px;
         align-items: center;
         padding: 10px;
         cursor: pointer;
-        &:hover{
+
+        &:hover {
             background-color: #f5f5f5;
         }
     }
 }
-.tool-table{
-    td{
+
+.tool-table {
+    td {
         border-bottom: 1px solid whitesmoke;
         vertical-align: middle;
         padding: 0.7rem;
     }
 }
-.tool-badge{
-    background-color: var(--bs-primary);
-    font-size: 12px;
-    padding: 5px 1rem;
-    border-radius: 5px;
-    color: white;
-    max-width: 110px;
-    overflow: hidden;
-    text-overflow: ellipsis;
 
+
+
+.no-data-found {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+
+    img {
+        width: 100px;
+    }
 }

@@ -96,6 +96,7 @@ body {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
     font-family: var(--bs-font-sans-serif);
+    overflow: hidden;
 
 }
 
@@ -25897,4 +25898,16 @@ alert.common-alert {
          border-color: var(--bs-red) !important;
         }
     }
+}
+
+.tool-badge {
+    background-color: var(--bs-primary);
+    font-size: 12px;
+    padding: 5px 1rem;
+    border-radius: 5px;
+    color: white;
+    max-width: 110px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
 }

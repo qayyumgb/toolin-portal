@@ -21,7 +21,8 @@
 }
 
 .setting-log {
-    padding: 10px 0 !important;
+    padding: 10px  !important;
+    width: 230px;
 
     li {
         &:not(:first-child) {
@@ -32,9 +33,9 @@
             }
 
         }
-        &:not(:last-child) {
-            border-bottom: 1px solid gainsboro;
-        }
+        // &:not(:last-child) {
+        //     border-bottom: 1px solid gainsboro;
+        // }
 
         padding: 7px 15px;
 
