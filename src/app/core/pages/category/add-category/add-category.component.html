@@ -48,7 +48,7 @@
                 <div class="form-group">
                     <label for="" class=" fw-bold">Image</label>
                    
-                    <input type="file" id="category-image-upload" formControlName="image" (change)="onFileChange($event)"
+                    <input type="file" [disabled]="uploadingPrecessing" id="category-image-upload" formControlName="image" (change)="onFileChange($event)"
                         class="form-control form-control-lg rounded-0  d-none" accept="image/png, image/jpg, image/jpeg"
                         [ngClass]="{'border-danger':newCategoyrForm.get('image')?.invalid && newCategoyrForm.get('image')?.touched  }">
 

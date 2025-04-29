@@ -25911,3 +25911,41 @@ alert.common-alert {
     text-overflow: ellipsis;
 
 }
+
+.bg-light-danger{
+    background-color: #ff00000a !important;
+}
+
+.loading {
+    position: relative;
+    display: block;
+    margin: auto;
+    left: 0;
+    height: 4px;
+    max-width: 200px;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #344767;
+    margin-top: 10px;
+    margin-bottom: 10px;
+
+
+    &::after {
+        position: absolute;
+        width: 250px;
+        content: '';
+        height: 5px;
+        left: 0;
+        animation: loading 0.5s infinite linear;
+        background: #344767;
+        background: linear-gradient(90deg, #344767 0%,#344767 5%, rgba(248, 145, 0, 0) 5%, rgba(248, 145, 0, 0) 10%, #344767 10%, #344767 15%, rgba(248, 145, 0, 0) 15%, rgba(248, 145, 0, 0) 20%, #344767 20%, #344767 25%, rgba(248, 145, 0, 0) 25%, rgba(248, 145, 0, 0) 30%, #344767 30%, #344767 35%, rgba(248, 145, 0, 0) 35%, rgba(248, 145, 0, 0) 40%, #344767 40%, #344767 45%, rgba(248, 145, 0, 0) 45%, rgba(248, 145, 0, 0) 50%, #344767 50%, #344767 55%, rgba(248, 145, 0, 0) 55%, rgba(248, 145, 0, 0) 60%, #344767 60%, #344767 65%, rgba(248, 145, 0, 0) 65%, rgba(248, 145, 0, 0) 70%, #344767 70%, #344767 75%, rgba(248, 145, 0, 0) 75%, rgba(248, 145, 0, 0) 80%, #344767 80%, #344767 85%, rgba(248, 145, 0, 0) 85%, rgba(248, 145, 0, 0) 90%, #344767 90%, #344767 95%, rgba(248, 145, 0, 0) 95%, rgba(248, 145, 0, 0) 100%);
+    }
+}
+@keyframes loading {
+    0%{
+        left: -50px;
+    }
+    100%{
+        left: 0px;
+    }
+}

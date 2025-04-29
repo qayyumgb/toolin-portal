@@ -72,11 +72,11 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       isOwnerApproved: [false],
       marketValue: ['', Validators.required],
       model: ['', Validators.required],
-      priceDaily: [0, Validators.required],
-      priceMonthly: [0, Validators.required],
-      priceWeekly: [0, Validators.required],
+      priceDaily: [0, [Validators.required, Validators.min(1)]],
+      priceMonthly: [0, [Validators.required, Validators.min(1)]],
+      priceWeekly: [0, [Validators.required, Validators.min(1)]],
       streetAddress: [''],
-      _geoloc: [{ lat: 51.509865, lng: -0.118092 }],
+      _geoloc: [{ lat: 51.509865, lng: -0.118092 }, Validators.required],
       isDeliveryAvailable: [false],
       isPublished: [false],
     });
@@ -287,6 +287,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       });
     })
   }
+  isImageTouch:boolean  =false;
   changeTab(e: number) {
     let goNext: boolean = false;
     switch (e) {
@@ -294,17 +295,26 @@ export class AddToolComponent implements OnInit, AfterViewInit {
         goNext = true;
         break;
       case 2:
-        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('name')?.valid && this.selectedCategory.length > 0 ? true : false;
+        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('model')?.valid && this.newToolForm.get('_geoloc')?.valid && this.newToolForm.get('name')?.valid && this.selectedCategory.length > 0 ? true : false;
         this.iscategorySelected = this.selectedCategory.length > 0;
         break;
       case 3:
         goNext = this.newToolForm.get('description')?.valid ? true : false
+        break;
+      case 4:
+        goNext = this.selectedFiles.length >0 ? true : false
+        this.isImageTouch = !goNext;
+        break;
+      case 5:
+        goNext =  this.newToolForm.get('priceMonthly')?.value > 0 &&  this.newToolForm.get('priceWeekly')?.value > 0 &&  this.newToolForm.get('priceDaily')?.value > 0
+         ? true : false
         break;
       default:
         goNext = true;
 
 
     }
+
     if (e < 6 && e > 0 && goNext) {
       this.formtab = e
       console.log(this.formtab);
@@ -349,10 +359,20 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   ]
 
   getModal(e: any) {
+    let x = document.createElement("div");
+    let dataHtml = x.innerHTML = e;
+    let data = x.innerText;
     console.log(e);
-    this.newToolForm.patchValue({
-      description: e
-    });
+    if (data == "") {
+      this.newToolForm.patchValue({
+        description: null
+      });
+    }
+    else {
+      this.newToolForm.patchValue({
+        description: e
+      });
+    }
   }
 
   removeImage(item: any) {

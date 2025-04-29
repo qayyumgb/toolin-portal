@@ -119,12 +119,30 @@
                                 </div>
                                 <label for="" class=" fw-bold">Tool Media</label>
 
-                                <input type="file" multiple id="toolMedia" class="rounded-0 d-none "
+                                <input type="file" multiple id="toolMedia" [disabled]="isLoading" class="rounded-0 d-none "
                                     (change)="onFileChange($event)">
-                                <label for="toolMedia" class="upload-media">
-                                    <div class=""><i class="fa fa-cloud-upload upload-icon"></i>
-                                        <h6 class="upload-note-title">Drop files here or click to upload tool image.</h6>
-                                        <span class="upload-note">You can upload multiple images of tools in PNG, JPG, or JPEG format.
+                                <label for="toolMedia" class="upload-media" [ngClass]="{'border-danger bg-light-danger':selectedFiles.length ==0 && isImageTouch}">
+                                    <div class="">
+                                        <i class="fa fa-cloud-upload upload-icon"
+                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
+                                        ></i>
+                                        <span class="loading" *ngIf="isLoading"></span>
+
+                                        <h6 class="upload-note-title" 
+                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
+                                        >
+                                        @if (selectedFiles.length ==0 && isImageTouch) {
+
+                                            Please select at least one tool image.
+                                        }@else{
+
+                                            Drop files here or click to upload tool image.
+                                        }
+                                    
+                                    </h6>
+                                        <span class="upload-note"
+                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
+                                        >You can upload multiple images of tools in PNG, JPG, or JPEG format.
 
                                         </span>
                                     </div>
@@ -136,16 +154,19 @@
                                 <div class="form-group currency-input">
                                     <label for="" class=" fw-bold">Daily Price</label>
                                     <input type="number" formControlName="priceDaily"
+                                    [ngClass]="{'border-danger':newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched }"
                                         class="form-control  form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
                                     <label for="" class=" fw-bold">Weely Price</label>
                                     <input type="number" formControlName="priceWeekly"
+                                    [ngClass]="{'border-danger':newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched }"
                                         class="form-control form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
                                     <label for="" class=" fw-bold">Monthly Price</label>
                                     <input type="number" formControlName="priceMonthly"
+                                    [ngClass]="{'border-danger':newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched }"
                                         class="form-control form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
@@ -210,7 +231,7 @@
                   
                     back
                 </button>
-                <button [disabled]="isLoading" *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
+                <button [disabled]="isLoading " *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
 
                     <i class="fa fa-angle-double-right"></i>
                     @if (isLoading) {
