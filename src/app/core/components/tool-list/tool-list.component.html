@@ -91,22 +91,23 @@
 
 
                         </tr>
-                        
-                    }
+
+                        }
                         }@else{
-                           <tr>
+                        <tr>
                             <td colspan="6">
-                               <div class=" d-flex flex-column justify-content-center align-items-center w-100">
-                                <app-no-data-found detail= " No tools have been listed yet. Add your tools to start renting!"></app-no-data-found>
-                                <div class="d-flex justify-content-center pb-3">
-                                    <a class="btn btn-primary px-6" ripple (click)="showModalHandling()">
-                                        <i class="fa fa-plus"></i>
-                                        New Tool
-                                    </a>
+                                <div class=" d-flex flex-column justify-content-center align-items-center w-100">
+                                    <app-no-data-found
+                                        detail=" No tools have been listed yet. Add your tools to start renting!"></app-no-data-found>
+                                    <div class="d-flex justify-content-center pb-3">
+                                        <a class="btn btn-primary px-6" ripple (click)="showModalHandling()">
+                                            <i class="fa fa-plus"></i>
+                                            New Tool
+                                        </a>
+                                    </div>
                                 </div>
-                               </div>
                             </td>
-                           </tr>
+                        </tr>
 
                         }
                         }

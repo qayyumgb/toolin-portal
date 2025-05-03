@@ -27,7 +27,7 @@ export class ToolService {
 update(id:any,tool: toolsDto): Observable<toolsDto> {
     return this.http.patch<toolsDto>(this.base + toolsEndpoints.getAll+"/"+id, tool);
   }
-  getAll(offset:any =1): Observable<toolsDto[]> {
+  getAll(offset:any =0): Observable<toolsDto[]> {
     return this.http.get<toolsDto[]>(this.base + toolsEndpoints.getToolList+"?limit=10&offset="+offset);
   }
   getbyId(Id:any): Observable<toolsDto> {

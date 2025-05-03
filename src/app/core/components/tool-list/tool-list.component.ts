@@ -28,7 +28,7 @@ export class ToolListComponent implements OnInit {
   ngOnInit(): void {
     this.getAll();
   }
-  private getAll(page:any = 1) {
+  private getAll(page:any = 0) {
     this.toolservices.getAll(page).subscribe({
       next: (data: any) => {
         this.toolList = data.data
