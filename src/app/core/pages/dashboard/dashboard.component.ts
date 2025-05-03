@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { OrderService } from '../../../shared/services/order.service';
 import { orderReturnDto } from '../../../constant/models/order.dto';
+import { ToolService } from '../../../shared/services/tool.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,18 +16,18 @@ import { orderReturnDto } from '../../../constant/models/order.dto';
 export class DashboardComponent {
   orderData: any | undefined
 
-  constructor(private orderServices: OrderService) { }
+  constructor(private toolservices: ToolService) { }
 
   ngOnInit(): void {
     this.getAll()
     }
 
   getAll(page: number = 0) {
-    this.orderServices.getAll(page).subscribe({
-      next: (x: orderReturnDto) => {
-        this.orderData = x;
+    this.toolservices.getAll(page).subscribe({
+      next: (x: any) => {
+        this.orderData = x.data;
 
-        console.log(this.orderData);
+        console.log(this.orderData, "data dashboard");
 
       }
 

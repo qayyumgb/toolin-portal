@@ -1,31 +1,32 @@
 <div class="container-fluid py-4 px-2 px-sm-3 px-md-4">
   <div class="row">
     @for (item of counter; track $index) {
-      <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-        <div class="card">
-          <div class="card-body p-3">
-            <div class="row">
-              <div class="col-8">
-                <div class="numbers">
-                  <p class="text-sm mb-0 text-capitalize font-weight-bold">{{item.title}}</p>
-                  <h5 class="font-weight-bolder mb-0">
-                    {{item.count}}
-                    <span class=" text-sm font-weight-bolder" [ngClass]="item.updown > 0?'text-success':'text-danger'">{{item.updown}}%</span>
-                  </h5>
-                </div>
+    <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+      <div class="card">
+        <div class="card-body p-3">
+          <div class="row">
+            <div class="col-8">
+              <div class="numbers">
+                <p class="text-sm mb-0 text-capitalize font-weight-bold">{{item.title}}</p>
+                <h5 class="font-weight-bolder mb-0">
+                  {{item.count}}
+                  <span class=" text-sm font-weight-bolder"
+                    [ngClass]="item.updown > 0?'text-success':'text-danger'">{{item.updown}}%</span>
+                </h5>
               </div>
-              <div class="col-4 text-end">
-                <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                  <i class="fa {{item.icon}} fs-5 opacity-10" aria-hidden="true"></i>
-                </div>
+            </div>
+            <div class="col-4 text-end">
+              <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
+                <i class="fa {{item.icon}} fs-5 opacity-10" aria-hidden="true"></i>
               </div>
             </div>
           </div>
         </div>
       </div>
+    </div>
     }
-    
-    
+
+
   </div>
   <div class="row mt-4">
     <div class="col-lg-7 mb-lg-0 mb-4">
@@ -40,14 +41,16 @@
                 <p class="mb-5 fw-light">
                   From carpentry, to gardening, to earth moving, and more - Toolin connects you to your needs.
                 </p>
-                <a class="text-body btn btn-outline-primary  text-primary text-sm font-weight-bold mb-0 icon-move-right mt-auto" routerLink="/tools/add">
+                <a class="text-body btn btn-outline-primary  text-primary text-sm font-weight-bold mb-0 icon-move-right mt-auto"
+                  routerLink="/tools/add">
                   Add Tool
                 </a>
               </div>
             </div>
             <div class="col-lg-5 ms-auto text-center mt-5 mt-lg-0">
-              <div class="bg-gradient-primary border-radius-lg h-100" style="background-image: url(/img/rocketmachine.jpg);background-size: cover;background-position: right;">
-                
+              <div class="bg-gradient-primary border-radius-lg h-100"
+                style="background-image: url(/img/rocketmachine.jpg);background-size: cover;background-position: right;">
+
                 <!-- <div class="position-relative d-flex align-items-center justify-content-center h-100">
                   <img class="w-100 position-relative z-index-2 pt-4" style="height: 190px;object-fit: contain;"
                     src="/img/rocketmachine.jpg" alt="rocket">
@@ -82,10 +85,10 @@
         <div class="card-header pb-0">
           <div class="row">
             <div class="col-lg-6 col-7">
-              <h6 class="heading-font fs-5 pt-3">Current Order</h6>
-              
+              <h6 class="heading-font fs-5 pt-3">Famous Tool</h6>
+
             </div>
-            
+
           </div>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -93,75 +96,65 @@
             <table class="table align-items-center mb-0">
               <thead>
                 <tr>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">ID</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">DATE</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 text-center"> STATUS</th>
-                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"> CUSTOMER</th>
-                  <th class=" text-uppercase text-secondary text-center text-xxs font-weight-bolder opacity-7">Total Amount</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Product</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Category
+                  </th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Brand</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Owner</th>
+                  <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 text-center">
+                    Price
+                  </th>
+
 
                 </tr>
               </thead>
               <tbody>
-                @if (orderData?.data) {
-                  @if(orderData.data.length>0){
-                  @for (item of orderData?.data; track $index) {
-                      <tr class=" text-xs  cursor-pointer" >
-                          
-                          <td class="py-2 text-bold"> {{item.id}}</td>
+                @if (orderData) {
+                @for (item of orderData; track $index) {
+                @if ($index <5) {
+                <tr class=" text-xs text-bold ">
 
-                          <td class=""> {{item.orderBy.createdAt | date :"MMM dd, YYYY "}}</td>
-                          <td class="text-center">
+                  <td class="p-3 cursor-pointer" routerLink="/tools/details/{{item.id}}">
+                    <div class="d-flex px-2 py-0">
+                      <div>
+                        <img src="{{item.images[0]}}" alt="atlassian" class="avatar avatar-sm me-3">
+                      </div>
+                      <div class="d-flex flex-column justify-content-center " style="max-width: 160px;">
+                        <h6 class="mb-0 text-sm ellipsis w-full">{{item.name}}</h6>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="">
+                    <div class="p-3 d-flex gap-2 category-box">
+
+                      @for (x of item.categories; track $index) {
+                      @if ($index < 2) { <span class="badge bg-secondary rounded-0 " title="x.name">
+                        {{x.name}}</span>
+                        }
+                        }
+                        @if (item.categories.length >2) {
+                        <span>+{{item.categories.length - 2}}</span>
+                        }
+                    </div>
+                  </td>
+                  <td class="p-3"> {{item.brand}}</td>
+                  <td class="p-3"> {{item.owner.firstName +" "+ item.owner.lastName}}</td>
+                  <td class="p-3 text-center">
+                    {{item.priceDaily}}
 
 
-                              <div class="d-flex align-items-center justify-content-center px-3">
-                                
 
-                                  <b class="text-xxs" ngClass="{{!item.isPaid ?'text-danger  ':'text-success'}}">{{item.isPaid
-                                      ? "PAID" :"NOT PAID"}}</b>
-                              </div>
-                          </td>
-                          <td class="">
-                              <div class="d-flex align-items-center">
+                  </td>
 
-                                  <span>{{item.orderBy.firstName + " "+ item.orderBy.lastName }}</span>
-                              </div>
-                          </td>
 
-                          <td class="text-center"> {{item.grandTotal}}</td>
 
-                      </tr>
-                      }
-                      }@else{
-                         <tr>
-                          <td colspan="6">
-                              <div class="no-data-found">
-                                <div class="align-items-center d-flex flex-column p-5">
-                                  <img src="img/nodata.png" alt="">
-                                  <h6 class="text-center text-primary mb-0">No Order Found</h6>
-                                  <p class="text-center">
-                                      <small>
-                                          No orders placed recently. This page updates automatically.
-                                      </small>
-                                  </p>
-                                </div>
-                              </div>
 
-                          </td>
-                         </tr>
-                      }
-              }
-              @else {
-                  @for (item of [1,1,1,1,1,1,1,1]; track $index) {
-                  <tr>
-                      <td class="px-3 py-4 sk" colspan="6">
-                          <div class="d-flex align-items-center  gap-2">
-                            
-                          </div>
-                      </td>
-                      
-                  </tr>
-                  }
-                  }
+                </tr>
+                }
+
+                }
+                }
+
               </tbody>
             </table>
           </div>
@@ -172,14 +165,14 @@
       <div class="card h-100 p-3">
         <div class="card-header pb-0">
           <h6 class="heading-font fs-5 mt-3">Orders overview</h6>
-         
+
         </div>
         <div class="card-body p-3">
           <div class="timeline timeline-one-side">
             <div class="timeline-block mb-3">
               <span class="timeline-step">
                 <span class="fa fa-bell text-danger text-gradient">
-                 
+
                 </span>
               </span>
               <div class="timeline-content">
@@ -238,5 +231,5 @@
       </div>
     </div>
   </div>
-  
+
 </div>

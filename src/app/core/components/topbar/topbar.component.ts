@@ -50,7 +50,6 @@ toggleDropdown(e:Event){
     this.setting.isFullNavbar().subscribe(x => this.showFullNav = x)
     this.setting.getIsMobiel().subscribe(x => this.isMobile = x)
    this.profiledetail = JSON.parse(localStorage.getItem("proifleDetail") || '{}')
-   console.log(this.profiledetail, "proifleDetail");
    
 
   }

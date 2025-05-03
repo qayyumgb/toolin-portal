@@ -42,7 +42,9 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   formtab: number = 1;
   dropdownList: any = [];
   selectedCategory: any = [];
+  selectedSubCategory: any = [];
   iscategorySelected: boolean = true;
+  isSubcategorySelected: boolean = true;
   dropdownSettings: IDropdownSettings = {};
   value1: string = '';
   isLoading: boolean = false;
@@ -63,6 +65,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       id: [""],
       brand: ['', Validators.required],
       categories: [[''], Validators.required],
+      subCategories: [[''], Validators.required],
       name: ['', Validators.required],
       description: ['', Validators.required],
       images: [[]],
@@ -79,6 +82,9 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       _geoloc: [{ lat: 51.509865, lng: -0.118092 }, Validators.required],
       isDeliveryAvailable: [false],
       isPublished: [false],
+      availableAfter: [12],
+      availableBefore: [12],
+      insuranceId: ["12"],
     });
   }
 
@@ -88,6 +94,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       _geoloc: { lat: this.lat, lng: this.lng },
       categories: this.selectedCategory.map((x: any) => x.item_id)
     })
+    debugger
     if (this.newToolForm.valid) {
       this.isLoading = false;
       if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "") {
@@ -114,6 +121,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
             this.routes.navigate(['/tools']);
           },
           error: (error) => {
+            this.isLoading = false;
             console.error('There was an error!', error);
           },
           complete: () => this.isLoading = false
@@ -123,6 +131,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       console.log('Form is invalid');
     }
   }
+
   EditToolHandler() {
     console.log('edit tools here')
   }
@@ -134,24 +143,60 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
     this.iscategorySelected = this.selectedCategory.length > 0;
-
+    this.getSubcategory()
   }
-  onSelectAll(items: any) {
-    this.selectedCategory = items;
+
+  onSubCatSelect(item: any) {
+    if (!this.selectedSubCategory.some((x: any) => x.item_id === item.item_id)) {
+      this.selectedSubCategory.push(item);
+    }
     this.newToolForm.patchValue({
-      categories: this.selectedCategory.map((x: any) => { return x.item_id })
+      subCategories: this.selectedSubCategory.map((x: any) => { return x.item_id })
     });
-    this.iscategorySelected = this.selectedCategory.length > 0;
-
+    this.isSubcategorySelected = this.selectedSubCategory.length > 0;
   }
+
+  onSelectAll(items: any, iscategory: boolean = true) {
+    if (iscategory) {
+      this.selectedCategory = items;
+      this.newToolForm.patchValue({
+        categories: this.selectedCategory.map((x: any) => { return x.item_id })
+      });
+      this.iscategorySelected = this.selectedCategory.length > 0;
+
+    }
+    else {
+      this.selectedSubCategory = items;
+      this.newToolForm.patchValue({
+        subCategory: this.selectedSubCategory.map((x: any) => { return x.item_id })
+      });
+      this.isSubcategorySelected = this.selectedSubCategory.length > 0;
+
+    }
+  }
+
+
   onItemDeSelect(item: any) {
+    debugger
     this.selectedCategory = this.selectedCategory.filter((x: any) => x.item_id !== item.item_id);
     this.newToolForm.patchValue({
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
     });
+    this.getSubcategory()
     this.iscategorySelected = this.selectedCategory.length > 0;
 
   }
+
+  onSubCateDeSelect(item: any) {
+    this.selectedSubCategory = this.selectedSubCategory.filter((x: any) => x.item_id !== item.item_id);
+    this.newToolForm.patchValue({
+      subCategories: this.selectedSubCategory.map((x: any) => { return x.item_id })
+    });
+    this.isSubcategorySelected = this.selectedSubCategory.length > 0;
+
+  }
+
+
   gettoolSub: any
   preSelectedCategory: any[] = []
   ngOnInit(): void {
@@ -165,7 +210,13 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       if (this.toolId) {
         this.tools.getbyId(this.toolId).subscribe({
           next: (data: any) => {
-            debugger
+            this.selectedCategory = data.categories.map((x: any) => {
+              return {
+                item_id: x.id,
+                item_text: x.name
+              }
+            });
+
             this.newToolForm.patchValue(data);
             this.newToolForm.patchValue({ _geoloc: "" })
             this.getAddFromCord.getAddressFromCoordinates(data._geoloc.lat, data._geoloc.lng).subscribe({
@@ -176,7 +227,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
             });
 
             this.previewUrls = data.images
-            this.preSelectedCategory = data.categories.map((x: any) => x.name)
             this.tools.getCategory().subscribe((x: any[]) => {
               this.category = x.map(x => {
                 return {
@@ -185,10 +235,19 @@ export class AddToolComponent implements OnInit, AfterViewInit {
                 }
               });
 
-              this.selectedCategory = this.category.filter((x: any) => this.preSelectedCategory.some(xx => xx == x.item_text))
-              console.log("this.preSelectedCategory", this.selectedCategory);
-              console.log("this.preSelectedCategory", this.preSelectedCategory);
-              console.log("this.preSelectedCategory", this.category);
+              if (data.subCategories) {
+                this.selectedSubCategory = data.subCategories.map((x: any) => {
+                  return {
+                    item_id: x.id,
+                    item_text: x.name
+                  }
+                });
+              }
+              this.newToolForm.patchValue({
+                subCategories: this.selectedSubCategory.map((x: any) => { return x.item_id })
+              });
+              this.getSubcategory();
+
             })
 
           },
@@ -224,8 +283,11 @@ export class AddToolComponent implements OnInit, AfterViewInit {
         debugger
         const place = this.autocomplete?.getPlace();
         console.log(place);
+        debugger
         console.log(place?.formatted_address);
-
+        this.newToolForm.patchValue({
+          streetAddress:place?.formatted_address,
+        })
         if (place && place.geometry) {
           this.getPlaces(place);
         } else {
@@ -276,7 +338,9 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       }
     });
   }
+
   category: { item_id: any, item_text: any }[] = [];
+  subCategory: { item_id: any, item_text: any }[] = [];
   getCategory() {
     this.tools.getCategory().subscribe((x: any[]) => {
       this.category = x.map(x => {
@@ -287,27 +351,47 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       });
     })
   }
-  isImageTouch:boolean  =false;
+
+  getSubcategory() {
+    let ids = this.selectedCategory.map((x: any) => x.item_id).join();
+    this.tools.getSubCategory(ids).subscribe((x: any[]) => {
+      this.subCategory = x.map(x => {
+        return {
+          item_id: x.id,
+          item_text: x.name
+        }
+      });
+      const subCategoryIds = new Set(this.subCategory.map((z: any) => z.item_id));
+      this.selectedSubCategory = this.selectedSubCategory.filter((x: any) => subCategoryIds.has(x.item_id));
+    })
+
+
+  }
+
+  isImageTouch: boolean = false;
   changeTab(e: number) {
+    debugger
     let goNext: boolean = false;
     switch (e) {
       case 1:
         goNext = true;
         break;
       case 2:
-        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('model')?.valid && this.newToolForm.get('_geoloc')?.valid && this.newToolForm.get('name')?.valid && this.selectedCategory.length > 0 ? true : false;
+      
         this.iscategorySelected = this.selectedCategory.length > 0;
+        this.isSubcategorySelected = this.selectedSubCategory.length > 0;
+        goNext = this.newToolForm.get('brand')?.valid && this.newToolForm.get('model')?.valid && this.newToolForm.get('_geoloc')?.valid && this.newToolForm.get('name')?.valid && (this.selectedCategory.length > 0 && this.selectedSubCategory.length > 0 ) ? true : false;
         break;
       case 3:
         goNext = this.newToolForm.get('description')?.valid ? true : false
         break;
       case 4:
-        goNext = this.selectedFiles.length >0 ? true : false
+        goNext = this.selectedFiles.length || this.previewUrls.length > 0 ? true : false
         this.isImageTouch = !goNext;
         break;
       case 5:
-        goNext =  this.newToolForm.get('priceMonthly')?.value > 0 &&  this.newToolForm.get('priceWeekly')?.value > 0 &&  this.newToolForm.get('priceDaily')?.value > 0
-         ? true : false
+        goNext = this.newToolForm.get('priceMonthly')?.value > 0 && this.newToolForm.get('priceWeekly')?.value > 0 && this.newToolForm.get('priceDaily')?.value > 0
+          ? true : false
         break;
       default:
         goNext = true;
@@ -317,7 +401,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
     if (e < 6 && e > 0 && goNext) {
       this.formtab = e
-      console.log(this.formtab);
 
     }
     else {
@@ -325,6 +408,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
     }
   }
+
   data = [
     {
       id: 1,
@@ -416,24 +500,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
 
 
-  // getAddressFromCoordinates(lat: number, lng: number) {
 
-  //   const geocoder = new google.maps.Geocoder();
-  //   const latlng = new google.maps.LatLng(lat, lng);
-
-  //   geocoder.geocode({ location: latlng }, (results: any, status: any) => {
-  //     if (status === google.maps.GeocoderStatus.OK) {
-  //       if (results[0]) {
-  //         const formattedAddress = results[0].formatted_address;
-  //         console.log("Address:", formattedAddress);
-  //         this.newToolForm.patchValue({ _geoloc: formattedAddress })
-  //       } else {
-  //         console.error("No address found.");
-  //       }
-  //     } else {
-  //       console.error("Geocoder failed due to: " + status);
-  //     }
-  //   });
-  // }
 
 }

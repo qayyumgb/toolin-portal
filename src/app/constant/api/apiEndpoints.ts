@@ -2,7 +2,8 @@
 export const toolsEndpoints =  {
 getAll : "tool",
 getToolList : "tool/list",
-categories : "category/all"
+categories : "category/all",
+subCategories : "category/sub?ids="
 }
 
 export const authEndpoints =

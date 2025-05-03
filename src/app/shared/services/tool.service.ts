@@ -18,6 +18,9 @@ export class ToolService {
   getCategory(): Observable<any[]> {
     return this.http.get<any[]>(this.base + toolsEndpoints.categories);
   }
+  getSubCategory(id:any): Observable<any[]> {
+    return this.http.get<any[]>(this.base + toolsEndpoints.subCategories+id);
+  }
   add(tool: toolsDto): Observable<toolsDto> {
     return this.http.post<toolsDto>(this.base + toolsEndpoints.getAll, tool);
   }

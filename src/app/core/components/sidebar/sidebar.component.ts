@@ -47,7 +47,6 @@ export class SidebarComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
-    console.log(4444444444444);
     if (window.innerWidth < 1024 ) {
       this.setting.showInMobile(false);
     }

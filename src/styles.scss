@@ -25752,7 +25752,8 @@ screen and (-ms-high-contrast:active) {
 
         .selected-item-container {
             .selected-item {
-                max-width: 150px !important;
+                max-width: 120px !important;
+                white-space: nowrap !important;
                 background: var(--gradian) !important;
                 border-color: var(--bs-primary) !important;
                 display: flex;
@@ -25947,5 +25948,20 @@ alert.common-alert {
     }
     100%{
         left: 0px;
+    }
+}
+
+.ellipsis{
+    overflow:hidden;
+    text-overflow:ellipsis;
+    white-space:nowrap;
+}
+.category-box{
+    overflow: hidden;
+    max-width: 250px;
+    span{
+        max-width: 60px;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

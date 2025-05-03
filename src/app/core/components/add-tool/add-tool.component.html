@@ -1,28 +1,27 @@
 <alert type="success" *ngIf="isUploadSucess" class="common-alert" [dismissOnTimeout]="2000">
-  <span>Images uploaded successfully!</span>
+    <span>Images uploaded successfully!</span>
 </alert>
 <alert type="danger" *ngIf="isUploadfailed" [dismissOnTimeout]="2000">
-  <span>uploading failed please try again!</span>
+    <span>uploading failed please try again!</span>
 </alert>
 <div class="container-fluid mt-4 ">
     <div class="card ">
         <div class="card-header px-lg-5 pt-lg-4">
-            
+
             @if(isEditForm){
-              <h4 class="pt-3 px-4 heading-font ">Edit Tool</h4>
+            <h4 class="pt-3 px-4 heading-font ">Edit Tool</h4>
             }
             @else{
-              <h4 class="pt-3 px-4 heading-font ">Add Tool</h4>
+            <h4 class="pt-3 px-4 heading-font ">Add Tool</h4>
             }
-            
+
         </div>
         <div class="card-body px-lg-5 pt-1">
             <div class="row justify-content-center">
                 <div class="col-lg-3">
                     <ul class=" step-file">
                         @for (item of data; track $index) {
-                        <li  class="stepper-item d-flex align-items-center gap-3"
-                            [class.active]="formtab > $index">
+                        <li class="stepper-item d-flex align-items-center gap-3" [class.active]="formtab > $index">
                             <span class="stepper-icon">
                                 <i [class]="'fa ' +item.icon"></i>
                             </span>
@@ -47,46 +46,69 @@
                                     [ngClass]="{'border-danger':newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched }"
                                     class="form-control form-control-lg rounded-0 ">
                             </div>
-                           
-                            <div class="form-group" *ngIf="category">
-                                <label for="" class=" fw-bold">Categories</label>
-                                <ng-multiselect-dropdown 
-                                    [placeholder]="'Select Category'"
-                                    [settings]="dropdownSettings" 
-                                    [data]="category" 
-                                    [(ngModel)]="selectedCategory"
-                                    [ngModelOptions]="{standalone: true}"
-                                    class="tool-multi-select"
-                                    [ngClass]="{'not-selected-category':!iscategorySelected}"
-                                    (onSelect)="onItemSelect($event)" 
-                                    (onDeSelect)="onItemDeSelect($event)"
-                                    (onSelectAll)="onSelectAll($event)">
-                                </ng-multiselect-dropdown>
+
+                            <div class="row">
+                                <!-- [class]="subCategory.length>0?'col-lg-6':'col-lg-12'" -->
+                                <div [class]="subCategory.length>0 || selectedSubCategory.length > 0?'col-lg-6':'col-lg-12'">
+                                    <div class="form-group" *ngIf="category">
+                                        <label for="" class=" fw-bold">Categories</label>
+                                        <ng-multiselect-dropdown [placeholder]="'Select Category'"
+                                            [settings]="dropdownSettings" [data]="category"
+                                            [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
+                                            class="tool-multi-select"
+                                            [ngClass]="{'not-selected-category':!iscategorySelected}"
+                                            (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)"
+                                            (onSelectAll)="onSelectAll($event)">
+
+                                        </ng-multiselect-dropdown>
+
+
+                                    </div>
+
+                                </div>
+                                <div class="col-lg-6">
+                                    @if (subCategory.length>0 || selectedSubCategory.length > 0) {
+                                    <div class="form-group" *ngIf="category">
+                                        <label for="" class=" fw-bold">Sub Categories</label>
+                                        <ng-multiselect-dropdown [placeholder]="'Select Category'"
+                                            [settings]="dropdownSettings" [data]="subCategory"
+                                            [(ngModel)]="selectedSubCategory" [ngModelOptions]="{standalone: true}"
+                                            class="tool-multi-select"
+                                            [ngClass]="{'not-selected-category':!isSubcategorySelected}"
+                                            (onSelect)="onSubCatSelect($event)" (onDeSelect)="onSubCateDeSelect($event)"
+                                            (onSelectAll)="onSelectAll($event, false)">
+                                        </ng-multiselect-dropdown>
+                                    </div>
+                                    }
+
+                                </div>
                             </div>
 
-                          <div class="row">
-                            <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="" class=" fw-bold">Brand Name</label>
-                                  
-                                    <input type="text" formControlName="brand"
-                                        class="form-control form-control-lg rounded-0 "
-                                        [ngClass]="{'border-danger':newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched  }">
-    
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class=" fw-bold">Brand Name</label>
+
+                                        <input type="text" formControlName="brand"
+                                            class="form-control form-control-lg rounded-0 "
+                                            [ngClass]="{'border-danger':newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched  }">
+
+                                    </div>
                                 </div>
-                              </div>
-                               <div class="col-lg-6">
-                                <div class="form-group">
-                                    <label for="" class=" fw-bold"> Model</label>
-                                    <input type="text" formControlName="model"
-                                        [ngClass]="{'border-danger':newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched }"
-                                        class="form-control form-control-lg rounded-0 ">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label for="" class=" fw-bold"> Model</label>
+                                        <input type="text" formControlName="model"
+                                            [ngClass]="{'border-danger':newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched }"
+                                            class="form-control form-control-lg rounded-0 ">
+                                    </div>
                                 </div>
-                               </div>
-                          </div>
+                            </div>
                             <div class="form-group">
                                 <label for="" class=" fw-bold"> Location</label>
-                                <input type="text" formControlName="_geoloc" #addresstext placeholder="Search by location"  class="form-control form-control-lg rounded-0 " [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }"/>
+                                <input type="text" formControlName="_geoloc" #addresstext
+                                    placeholder="Search by location" class="form-control form-control-lg rounded-0 "
+                                    [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }" />
                             </div>
                         </div>
 
@@ -114,35 +136,34 @@
                                     </div>
                                     }
                                     @if(uploading){
-                                      <strong>Uploading...</strong>
+                                    <strong>Uploading...</strong>
                                     }
                                 </div>
                                 <label for="" class=" fw-bold">Tool Media</label>
 
-                                <input type="file" multiple id="toolMedia" [disabled]="isLoading" class="rounded-0 d-none "
-                                    (change)="onFileChange($event)">
-                                <label for="toolMedia" class="upload-media" [ngClass]="{'border-danger bg-light-danger':selectedFiles.length ==0 && isImageTouch}">
+                                <input type="file" multiple id="toolMedia" [disabled]="isLoading"
+                                    class="rounded-0 d-none " (change)="onFileChange($event)">
+                                <label for="toolMedia" class="upload-media"
+                                    [ngClass]="{'border-danger bg-light-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">
                                     <div class="">
                                         <i class="fa fa-cloud-upload upload-icon"
-                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
-                                        ></i>
+                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }"></i>
                                         <span class="loading" *ngIf="isLoading"></span>
 
-                                        <h6 class="upload-note-title" 
-                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
-                                        >
-                                        @if (selectedFiles.length ==0 && isImageTouch) {
+                                        <h6 class="upload-note-title"
+                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">
+                                            @if ((selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length ) {
 
                                             Please select at least one tool image.
-                                        }@else{
+                                            }@else{
 
                                             Drop files here or click to upload tool image.
-                                        }
-                                    
-                                    </h6>
+                                            }
+
+                                        </h6>
                                         <span class="upload-note"
-                                        [ngClass]="{'text-danger':selectedFiles.length ==0 && isImageTouch}"
-                                        >You can upload multiple images of tools in PNG, JPG, or JPEG format.
+                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">You can
+                                            upload multiple images of tools in PNG, JPG, or JPEG format.
 
                                         </span>
                                     </div>
@@ -154,19 +175,19 @@
                                 <div class="form-group currency-input">
                                     <label for="" class=" fw-bold">Daily Price</label>
                                     <input type="number" formControlName="priceDaily"
-                                    [ngClass]="{'border-danger':newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched }"
+                                        [ngClass]="{'border-danger':newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched }"
                                         class="form-control  form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
                                     <label for="" class=" fw-bold">Weely Price</label>
                                     <input type="number" formControlName="priceWeekly"
-                                    [ngClass]="{'border-danger':newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched }"
+                                        [ngClass]="{'border-danger':newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched }"
                                         class="form-control form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
                                     <label for="" class=" fw-bold">Monthly Price</label>
                                     <input type="number" formControlName="priceMonthly"
-                                    [ngClass]="{'border-danger':newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched }"
+                                        [ngClass]="{'border-danger':newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched }"
                                         class="form-control form-control-lg rounded-0 ">
                                 </div>
                                 <div class="form-group">
@@ -226,41 +247,45 @@
         </div>
         <div class="card-footer pt-0 px-lg-5 pb-lg-5">
             <div class="d-flex justify-content-end gap-1">
-                <button [disabled]="isLoading" *ngIf="formtab>1"  class="btn btn-primary mb-0" (click)="changeTab(formtab-1)">
+                <button [disabled]="isLoading" *ngIf="formtab>1" class="btn btn-primary mb-0"
+                    (click)="changeTab(formtab-1)">
                     <i class="fa fa-angle-double-left"></i> &nbsp;
-                  
+
                     back
                 </button>
-                <button [disabled]="isLoading " *ngIf="formtab< 5" class="btn btn-primary mb-0" (click)="changeTab(formtab+1)">Next &nbsp;
+                <button [disabled]="isLoading " *ngIf="formtab< 5" class="btn btn-primary mb-0"
+                    (click)="changeTab(formtab+1)">Next &nbsp;
 
                     <i class="fa fa-angle-double-right"></i>
                     @if (isLoading) {
-                        <div class="loader"></div>
+                    <div class="loader"></div>
                     }
-                   
+
                 </button>
-               
+
                 @if(isEditForm){
-                  <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+                <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0"
+                    (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
                     Update
                     @if (isLoading) {
-                        <div class="loader"></div>
+                    <div class="loader"></div>
                     }
                 </button>
                 }
                 @else{
-                  <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0" (click)="AddToolHandler()">
+                <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0"
+                    (click)="AddToolHandler()">
 
                     <i class="fa fa-saves"></i> &nbsp;
                     save
                     @if (isLoading) {
-                        <div class="loader"></div>
+                    <div class="loader"></div>
                     }
                 </button>
                 }
-               
+
             </div>
         </div>
     </div>
