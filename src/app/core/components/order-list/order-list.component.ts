@@ -32,8 +32,6 @@ export class OrderListComponent implements OnInit {
         this.orderData = x;
         this.pagination = x?.pagination;
 
-        console.log(this.orderData);
-
       }
 
     })

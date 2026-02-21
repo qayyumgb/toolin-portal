@@ -46,8 +46,6 @@ constructor(private categoryService : CategoryService) {
               showConfirmButton: false,
               timer: 1500
             });
-            console.log(x);
-            
             this.getAll();
   
           }
@@ -65,8 +63,6 @@ constructor(private categoryService : CategoryService) {
     this.disablePagination =true
     this.categoryService.getAll(page).subscribe({
       next: (response: any) => {
-        console.log(response);
-        
         this.pagination = response?.pagination;
         this.categoryList = response?.data || [];
       },

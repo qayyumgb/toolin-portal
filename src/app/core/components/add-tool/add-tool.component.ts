@@ -48,8 +48,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   dropdownSettings: IDropdownSettings = {};
   value1: string = '';
   isLoading: boolean = false;
-  addTool(tool: addTool) {
-    console.log(tool)
+  addTool(_tool: addTool) {
   }
   newToolForm: FormGroup;
   toolId: string | null = null;
@@ -94,9 +93,8 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       _geoloc: { lat: this.lat, lng: this.lng },
       categories: this.selectedCategory.map((x: any) => x.item_id)
     })
-    debugger
     if (this.newToolForm.valid) {
-      this.isLoading = false;
+      this.isLoading = true;
       if (this.newToolForm.get('id')?.value == null || this.newToolForm.get('id')?.value == "") {
         this.newToolForm.removeControl('id')
         this.tools.add(this.newToolForm.value).subscribe({
@@ -128,13 +126,10 @@ export class AddToolComponent implements OnInit, AfterViewInit {
         });
       }
     } else {
-      console.log('Form is invalid');
+      this.newToolForm.markAllAsTouched();
     }
   }
 
-  EditToolHandler() {
-    console.log('edit tools here')
-  }
   onItemSelect(item: any) {
     if (!this.selectedCategory.some((x: any) => x.item_id === item.item_id)) {
       this.selectedCategory.push(item);
@@ -177,7 +172,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
 
   onItemDeSelect(item: any) {
-    debugger
     this.selectedCategory = this.selectedCategory.filter((x: any) => x.item_id !== item.item_id);
     this.newToolForm.patchValue({
       categories: this.selectedCategory.map((x: any) => { return x.item_id })
@@ -280,11 +274,7 @@ export class AddToolComponent implements OnInit, AfterViewInit {
       this.autocomplete = new google.maps.places.Autocomplete(this.addresstext.nativeElement);
 
       this.autocomplete.addListener("place_changed", () => {
-        debugger
         const place = this.autocomplete?.getPlace();
-        console.log(place);
-        debugger
-        console.log(place?.formatted_address);
         this.newToolForm.patchValue({
           streetAddress:place?.formatted_address,
         })
@@ -326,15 +316,10 @@ export class AddToolComponent implements OnInit, AfterViewInit {
     geocoder.geocode({ location: latlng }, (results, status) => {
       if (status === 'OK') {
         if (results) {
-          console.log('Location name:', results[0].formatted_address);
           this.newToolForm.patchValue({
             _geoloc: results[0].formatted_address
           })
-        } else {
-          console.log('No results found');
         }
-      } else {
-        console.error('Geocoder failed due to:', status);
       }
     });
   }
@@ -370,7 +355,6 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
   isImageTouch: boolean = false;
   changeTab(e: number) {
-    debugger
     let goNext: boolean = false;
     switch (e) {
       case 1:
@@ -444,9 +428,8 @@ export class AddToolComponent implements OnInit, AfterViewInit {
 
   getModal(e: any) {
     let x = document.createElement("div");
-    let dataHtml = x.innerHTML = e;
+    x.innerHTML = e;
     let data = x.innerText;
-    console.log(e);
     if (data == "") {
       this.newToolForm.patchValue({
         description: null

@@ -28,7 +28,6 @@ getallUser(offset:number = 0){
   this.userServices.getAll(offset).subscribe({
     next: (x: any) => {
       this.userList = x.users
-      console.log(x);
       this.disablePagination = false;
 
       this.pagination = x.users.pagination;

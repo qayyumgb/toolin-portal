@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ToolService } from '../../../shared/services/tool.service';
 import { paginationDto, toolsDto } from '../../../constant/models/tools';
-import { Route, Router, RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { RippleModule } from '../../../constant/directive/ripple.directive';
 import Swal from 'sweetalert2';
 import { PaginationComponent } from '../../../shared/component/pagination/pagination.component';
@@ -33,8 +33,6 @@ export class ToolListComponent implements OnInit {
       next: (data: any) => {
         this.toolList = data.data
         this.pagination = data.pagination
-        console.log(this.toolList);
-        
       },
       error: (err) => {
       },
@@ -63,8 +61,6 @@ delete(id:any){
             showConfirmButton: false,
             timer: 1500
           });
-          console.log(x);
-          
           this.getAll();
 
         }

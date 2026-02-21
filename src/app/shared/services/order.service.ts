@@ -1,24 +1,64 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { env } from '../../../environments/environment';
-import { orderApi, paymentApi } from '../../constant/api/apiEndpoints';
-import { Observable } from 'rxjs';
-import { orderReturnDto } from '../../constant/models/order.dto';
+import { Observable, from } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { getFirestore } from './firebase-init';
+
+const PAGE_SIZE = 10;
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
+  private get db() { return getFirestore(); }
 
-  constructor(private http:HttpClient) { }
+  getAll(page: number = 1): Observable<any> {
+    if (page < 1) page = 1;
+    return from(this.db.collection('orders').get()).pipe(
+      map(snapshot => {
+        const allDocs = snapshot.docs
+          .map(doc => ({ ...doc.data(), id: doc.id }))
+          .sort((a: any, b: any) => {
+            const aTime = a.createdOn?.seconds || a.createdOn?._seconds || 0;
+            const bTime = b.createdOn?.seconds || b.createdOn?._seconds || 0;
+            return bTime - aTime;
+          });
 
-  getAll(page:number):Observable<orderReturnDto>{
-    return this.http.get<orderReturnDto>(env.base+orderApi.getAll+"?offset="+page)
+        const totalCount = allDocs.length;
+        const totalPages = Math.ceil(totalCount / PAGE_SIZE);
+        const start = (page - 1) * PAGE_SIZE;
+        const data = allDocs.slice(start, start + PAGE_SIZE);
+
+        return {
+          data,
+          pagination: {
+            count: totalCount,
+            limit: PAGE_SIZE,
+            offset: page,
+            totalPages,
+          },
+        };
+      })
+    );
   }
-  getById(Id:any):Observable<any>{
-    return this.http.get<any>(env.base+orderApi.getOrder+"/"+Id)
+
+  getById(id: string): Observable<any> {
+    return from(this.db.collection('orders').doc(id).get()).pipe(
+      map(doc => {
+        if (!doc.exists) return null;
+        return { ...doc.data(), id: doc.id };
+      })
+    );
   }
-  paymentApi(Id:any):Observable<any>{
-    return this.http.get<any>(env.base+paymentApi.payment+Id)
+
+  paymentApi(id: string): Observable<any> {
+    return from(
+      this.db.collection('payments').where('orderId', '==', id).limit(1).get()
+    ).pipe(
+      map(snapshot => {
+        if (snapshot.empty) return null;
+        const doc = snapshot.docs[0];
+        return { ...doc.data(), id: doc.id };
+      })
+    );
   }
 }

@@ -23,8 +23,6 @@ data:toolsDto | undefined;
   ngOnInit(): void {
     this.toolservice.getbyId(this.id).subscribe({
       next:x => {
-        console.log(x);
-        
         this.data = x}
     })
   }
@@ -100,10 +98,12 @@ data:toolsDto | undefined;
   getData(e:any){
 
   }
-  convertTimestamp(timestamp: { _seconds: number; _nanoseconds: number } |any): string {
-    const milliseconds = timestamp._seconds * 1000;
-    const additionalMilliseconds = timestamp._nanoseconds / 1_000_000;
-    const date = new Date(milliseconds + additionalMilliseconds);
-    return date.toISOString(); 
+  convertTimestamp(timestamp: any): string {
+    if (!timestamp) return '';
+    if (timestamp.toDate) return timestamp.toDate().toISOString();
+    const seconds = timestamp._seconds ?? timestamp.seconds ?? 0;
+    const nanoseconds = timestamp._nanoseconds ?? timestamp.nanoseconds ?? 0;
+    const date = new Date(seconds * 1000 + nanoseconds / 1_000_000);
+    return date.toISOString();
   }
 }

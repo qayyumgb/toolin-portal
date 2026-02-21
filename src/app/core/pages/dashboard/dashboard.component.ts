@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { ProgressBarComponent } from '../../../shared/component/progress-bar/progress-bar.component';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { OrderService } from '../../../shared/services/order.service';
-import { orderReturnDto } from '../../../constant/models/order.dto';
 import { ToolService } from '../../../shared/services/tool.service';
 
 @Component({
@@ -26,8 +24,6 @@ export class DashboardComponent {
     this.toolservices.getAll(page).subscribe({
       next: (x: any) => {
         this.orderData = x.data;
-
-        console.log(this.orderData, "data dashboard");
 
       }
 

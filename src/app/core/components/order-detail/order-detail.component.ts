@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { ToolService } from '../../../shared/services/tool.service';
 import { OrderService } from '../../../shared/services/order.service';
 import { orderdetail } from '../../../constant/models/order.dto';
 import { CommonModule } from '@angular/common';
@@ -21,13 +20,12 @@ export class OrderDetailComponent implements OnInit {
   ngOnInit(): void {
     this.route.paramMap.subscribe(params => { 
       this.orderId = params.get('id');
+      if (!this.orderId) return;
       this.orderService.getById(this.orderId).subscribe({
         next: (data) => {
-          console.log('order-dertail',data);
           this.orderDetails = data;
           this.orderService.paymentApi(data.id).subscribe({
             next:(x)=>{
-              console.log(x)
               this.cardinfo = x;
             }
           })

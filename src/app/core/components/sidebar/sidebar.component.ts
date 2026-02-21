@@ -27,7 +27,6 @@ export class SidebarComponent implements OnInit {
       .pipe(filter((event: any) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
         this.currentRoute = event.urlAfterRedirects;
-        console.log(this.currentRoute);
 
       });
     this.setting.isFullNavbar().subscribe((x) => {

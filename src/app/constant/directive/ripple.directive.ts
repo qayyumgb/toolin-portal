@@ -46,8 +46,7 @@ export class RippleModule {
 
     // Append the ripple to the button
     this.renderer.appendChild(button, ripple);
-    console.log(ripple);
-    
+
     // Remove the ripple after animation
     setTimeout(() => {
       this.renderer.removeChild(button, ripple);

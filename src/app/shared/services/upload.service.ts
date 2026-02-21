@@ -26,9 +26,7 @@ export class UploadService {
           error: (err) => reject(err),
         });
       }) as any).subscribe({
-        next: (snapshot) => {
-          console.log('snapshot', snapshot)
-        },
+        next: () => {},
         error: (err) => reject(err),
       });
       // const subscription = uploadTask.snapshotChanges().subscribe({

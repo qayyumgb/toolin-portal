@@ -9,7 +9,6 @@ async function  getAddressFromCoordinates(lat: number, lng: number,) {
       if (status === google.maps.GeocoderStatus.OK) {
         if (results[0]) {
           const formattedAddress = results[0].formatted_address;
-          console.log("Address:", formattedAddress);
           return formattedAddress
         } else {
           console.error("No address found.");

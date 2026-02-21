@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { CategoryService } from '../../../../shared/services/category.service';
 import { UploadService } from '../../../../shared/services/upload.service';
 import { ToastrService } from 'ngx-toastr';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-category',
@@ -54,7 +54,6 @@ export class AddCategoryComponent {
           })
           this.uploadingPrecessing = false;
           this.saveDisable =false;
-          console.log('Uploaded URLs:', this.previewUrls);
         },
           (err) => {
             console.error('Error uploading files:', err);
@@ -65,7 +64,6 @@ export class AddCategoryComponent {
   getbyId(id: string) {
     this._service.getById(id).subscribe({
       next: (x: any) => {
-        console.log(x);
         this.previewUrls = x.image
         this.newCategoyrForm.patchValue({
           id: x.id,
@@ -91,8 +89,7 @@ export class AddCategoryComponent {
             description: this.newCategoyrForm.get('description')?.value,
           }
         ).subscribe({
-          next: x => {
-            console.log(x)
+          next: () => {
             this.toast.success("Category is successfully added")
             this.router.navigate(['/cateogry'])
             this.saveDisable= false;
@@ -110,8 +107,7 @@ export class AddCategoryComponent {
             description: this.newCategoyrForm.get('description')?.value,
           }
         ).subscribe({
-          next: x => {
-            console.log(x)
+          next: () => {
             this.toast.success("Category is successfully Updated")
             this.router.navigate(['/cateogry'])
           }
