@@ -65,10 +65,12 @@ export class ToolService {
     return from(waitForAuth()).pipe(
       switchMap((currentUser) => {
         const profile = this.getProfile();
+        const ownerUid = currentUser?.uid || profile.uid || profile.id;
         const data = {
           ...tool,
+          ownerId: ownerUid,
           owner: {
-            uid: currentUser?.uid || profile.uid || profile.id,
+            uid: ownerUid,
             email: currentUser?.email || profile.email || '',
             firstName: profile.firstName || '',
             lastName: profile.lastName || '',

@@ -80,3 +80,41 @@
         cursor: pointer;
     }
 }
+
+.notification-badge {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #ef4444;
+    color: white;
+    border-radius: 50px;
+    font-size: 10px;
+    min-width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    padding: 0 4px;
+    font-weight: 600;
+}
+
+.notification-dropdown-portal {
+    min-width: 320px;
+    max-width: 380px;
+    overflow: hidden;
+    border-radius: 0.5rem;
+
+    .notification-list-portal {
+        max-height: 320px;
+        overflow-y: auto;
+    }
+
+    .dropdown-item {
+        white-space: normal;
+
+        &:hover {
+            background-color: #f8f9fa;
+        }
+    }
+}

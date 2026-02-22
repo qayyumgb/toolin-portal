@@ -1,0 +1,109 @@
+<div class="container-fluid py-4">
+  <div class="row">
+    <div class="col-12">
+      <div class="card mb-4">
+        <div class="card-header pb-0">
+          <h6>Messages</h6>
+        </div>
+        <div class="card-body p-0">
+
+          <!-- Loading -->
+          <div *ngIf="loading" class="text-center p-5">
+            <i class="fa fa-spinner fa-spin me-2"></i> Loading conversations...
+          </div>
+
+          <!-- Chat Layout -->
+          <div *ngIf="!loading" class="chat-layout">
+            <!-- Left: Conversation List -->
+            <div class="chat-sidebar" [class.d-none-mobile]="selectedConversation">
+              <div *ngIf="conversations.length === 0" class="text-center p-4 text-muted">
+                <i class="fa fa-comments" style="font-size: 2rem;"></i>
+                <p class="mt-2 mb-0">No conversations yet</p>
+                <p class="text-sm">Buyer messages will appear here.</p>
+              </div>
+
+              <div *ngFor="let conv of conversations"
+                   class="conversation-item"
+                   [class.active]="selectedConversation?.id === conv.id"
+                   (click)="selectConversation(conv)">
+                <div class="conv-avatar">
+                  <img *ngIf="conv.toolImage" [src]="conv.toolImage" alt="tool" class="avatar-img">
+                  <div *ngIf="!conv.toolImage" class="avatar-placeholder">
+                    <i class="fa fa-wrench"></i>
+                  </div>
+                </div>
+                <div class="conv-info">
+                  <div class="d-flex justify-content-between">
+                    <span class="conv-name">{{conv.otherUserName || 'User'}}</span>
+                    <span class="conv-time">{{formatTime(conv.lastMessageAt)}}</span>
+                  </div>
+                  <div class="conv-tool text-sm text-muted">{{conv.toolName}}</div>
+                  <div *ngIf="conv.lastMessage" class="conv-preview text-sm text-muted">
+                    {{conv.lastMessage.length > 40 ? (conv.lastMessage | slice:0:40) + '...' : conv.lastMessage}}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Chat Area -->
+            <div class="chat-main" [class.d-none-mobile]="!selectedConversation">
+              <!-- No conversation selected -->
+              <div *ngIf="!selectedConversation" class="text-center text-muted d-flex flex-column align-items-center justify-content-center h-100">
+                <i class="fa fa-comments" style="font-size: 3rem; color: #ccc;"></i>
+                <p class="mt-3">Select a conversation to start chatting</p>
+              </div>
+
+              <!-- Conversation selected -->
+              <div *ngIf="selectedConversation" class="d-flex flex-column h-100">
+                <!-- Header -->
+                <div class="chat-header d-flex align-items-center gap-2 p-3 border-bottom">
+                  <button class="btn btn-sm btn-link d-md-none" (click)="goBack()">
+                    <i class="fa fa-arrow-left"></i>
+                  </button>
+                  <img *ngIf="selectedConversation.toolImage" [src]="selectedConversation.toolImage"
+                       alt="tool" class="chat-header-img">
+                  <div>
+                    <div class="fw-bold">{{selectedConversation.otherUserName}}</div>
+                    <div class="text-sm text-muted">{{selectedConversation.toolName}}</div>
+                  </div>
+                </div>
+
+                <!-- Messages -->
+                <div class="chat-messages" #messagesContainer>
+                  <div *ngFor="let msg of messages"
+                       class="message-row"
+                       [class.my-message]="isMyMessage(msg)"
+                       [class.other-message]="!isMyMessage(msg)">
+                    <div class="message-bubble">
+                      <p class="mb-0">{{msg.text}}</p>
+                      <small class="msg-time">{{formatTime(msg.createdAt)}}</small>
+                    </div>
+                  </div>
+
+                  <div *ngIf="messages.length === 0" class="text-center text-muted mt-5">
+                    <p>No messages yet. Say hello!</p>
+                  </div>
+                </div>
+
+                <!-- Input -->
+                <div class="chat-input d-flex align-items-center gap-2 p-3 border-top">
+                  <input type="text" class="form-control"
+                         [(ngModel)]="newMessage"
+                         (keydown)="onKeyDown($event)"
+                         placeholder="Type a message..."
+                         [disabled]="sendingMessage">
+                  <button class="btn bg-gradient-primary"
+                          (click)="sendMessage()"
+                          [disabled]="!newMessage.trim() || sendingMessage">
+                    <i class="fa fa-paper-plane"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -70,6 +70,12 @@ export class SidebarComponent implements OnInit {
       icon: "fa-shopping-bag",
       role: "none"
     },
+    {
+      title: "Messages",
+      route: "/messages",
+      icon: "fa-comments",
+      role: "none"
+    },
 
     {
       title: "Category",

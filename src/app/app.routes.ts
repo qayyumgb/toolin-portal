@@ -16,6 +16,7 @@ import { authGuard, isNotLogin } from './constant/auth.guard';
 import { CategoryListComponent } from './core/pages/category/category-list/category-list.component';
 import { AddCategoryComponent } from './core/pages/category/add-category/add-category.component';
 import { ProfileComponent } from './core/pages/profile/profile.component';
+import { MessagesComponent } from './core/pages/messages/messages.component';
 
 export const routes: Routes = [
     {
@@ -87,6 +88,10 @@ export const routes: Routes = [
             {
                 path: "profile",
                 component: ProfileComponent,
+            },
+            {
+                path: "messages",
+                component: MessagesComponent,
             },
             {
                 path: "",
