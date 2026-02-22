@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, of, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { getFirestore, firebase } from './firebase-init';
+import { map, switchMap } from 'rxjs/operators';
+import { getFirestore, firebase, waitForAuth } from './firebase-init';
 
 @Injectable({
   providedIn: 'root',
@@ -62,31 +62,48 @@ export class ToolService {
   }
 
   add(tool: any): Observable<any> {
-    const data = {
-      ...tool,
-      createdOn: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
-      deletedAt: null,
-    };
-    return from(this.db.collection('tools').add(data)).pipe(
-      map(ref => ({ id: ref.id, ...data }))
+    return from(waitForAuth()).pipe(
+      switchMap((currentUser) => {
+        const profile = this.getProfile();
+        const data = {
+          ...tool,
+          owner: {
+            uid: currentUser?.uid || profile.uid || profile.id,
+            email: currentUser?.email || profile.email || '',
+            firstName: profile.firstName || '',
+            lastName: profile.lastName || '',
+          },
+          createdOn: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedOn: firebase.firestore.FieldValue.serverTimestamp(),
+          deletedAt: null,
+        };
+        return from(this.db.collection('tools').add(data)).pipe(
+          map(ref => ({ id: ref.id, ...data }))
+        );
+      })
     );
   }
 
   update(id: string, tool: any): Observable<any> {
-    const data = { ...tool };
-    delete data.id;
-    data.updatedOn = firebase.firestore.FieldValue.serverTimestamp();
-    return from(this.db.collection('tools').doc(id).update(data)).pipe(
-      map(() => ({ id, ...data }))
+    return from(waitForAuth()).pipe(
+      switchMap(() => {
+        const data = { ...tool };
+        delete data.id;
+        data.updatedOn = firebase.firestore.FieldValue.serverTimestamp();
+        return from(this.db.collection('tools').doc(id).update(data)).pipe(
+          map(() => ({ id, ...data }))
+        );
+      })
     );
   }
 
   delete(id: string): Observable<any> {
-    return from(
-      this.db.collection('tools').doc(id).update({
-        deletedAt: firebase.firestore.FieldValue.serverTimestamp(),
-      })
+    return from(waitForAuth()).pipe(
+      switchMap(() =>
+        from(this.db.collection('tools').doc(id).update({
+          deletedAt: firebase.firestore.FieldValue.serverTimestamp(),
+        }))
+      )
     );
   }
 

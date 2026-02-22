@@ -90,8 +90,9 @@ export class AddToolComponent implements OnInit, AfterViewInit {
   AddToolHandler() {
     this.newToolForm.patchValue({
       images: this.previewUrls,
-      _geoloc: { lat: this.lat, lng: this.lng },
-      categories: this.selectedCategory.map((x: any) => x.item_id)
+      _geoloc: { lat: this.lat ?? 0, lng: this.lng ?? 0 },
+      categories: this.selectedCategory.map((x: any) => ({ id: x.item_id, name: x.item_text })),
+      subCategories: this.selectedSubCategory.map((x: any) => ({ id: x.item_id, name: x.item_text })),
     })
     if (this.newToolForm.valid) {
       this.isLoading = true;
@@ -103,6 +104,8 @@ export class AddToolComponent implements OnInit, AfterViewInit {
             this.routes.navigate(['/tools']);
           },
           error: (error) => {
+            this.isLoading = false;
+            this.toast.error(error?.message || 'Failed to add tool', 'Error');
             console.error('There was an error!', error);
           },
           complete: () => {

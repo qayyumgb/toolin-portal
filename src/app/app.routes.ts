@@ -15,6 +15,7 @@ import { LayoutComponent } from './core/layout/layout.component';
 import { authGuard, isNotLogin } from './constant/auth.guard';
 import { CategoryListComponent } from './core/pages/category/category-list/category-list.component';
 import { AddCategoryComponent } from './core/pages/category/add-category/add-category.component';
+import { ProfileComponent } from './core/pages/profile/profile.component';
 
 export const routes: Routes = [
     {
@@ -82,6 +83,10 @@ export const routes: Routes = [
                 path: "user",
                 component: UserComponent,
                 
+            },
+            {
+                path: "profile",
+                component: ProfileComponent,
             },
             {
                 path: "",

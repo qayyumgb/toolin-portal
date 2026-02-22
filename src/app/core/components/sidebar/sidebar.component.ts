@@ -83,5 +83,11 @@ export class SidebarComponent implements OnInit {
       icon: "fa-user",
       role: "Admin"
     },
+    {
+      title: "Profile",
+      route: "/profile",
+      icon: "fa-id-card",
+      role: "none"
+    },
   ]
 }

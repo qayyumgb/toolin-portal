@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import { firebase, getFirestore } from '../../../shared/services/firebase-init';
+import { Observable, from } from 'rxjs';
+import { switchMap } from 'rxjs/operators';
+import { firebase, getFirestore, waitForAuth } from '../../../shared/services/firebase-init';
 
 @Injectable({
   providedIn: 'root'
@@ -32,14 +33,29 @@ export class AuthService {
   }
 
   getUserProfile(uid: string): Observable<any> {
-    return new Observable(subscriber => {
-      this.db.collection('users').doc(uid).get()
-        .then(doc => {
-          subscriber.next(!doc.exists ? null : { ...doc.data(), id: doc.id });
-          subscriber.complete();
-        })
-        .catch(err => subscriber.error(err));
-    });
+    return from(waitForAuth()).pipe(
+      switchMap(() => new Observable(subscriber => {
+        this.db.collection('users').doc(uid).get()
+          .then(doc => {
+            subscriber.next(!doc.exists ? null : { ...doc.data(), id: doc.id });
+            subscriber.complete();
+          })
+          .catch(err => subscriber.error(err));
+      }))
+    );
+  }
+
+  updateUserProfile(uid: string, changes: any): Observable<void> {
+    return from(waitForAuth()).pipe(
+      switchMap(() => new Observable<void>(subscriber => {
+        this.db.collection('users').doc(uid).update(changes)
+          .then(() => {
+            subscriber.next();
+            subscriber.complete();
+          })
+          .catch(err => subscriber.error(err));
+      }))
+    );
   }
 
   logout() {

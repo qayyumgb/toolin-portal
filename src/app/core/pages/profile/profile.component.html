@@ -1,0 +1,88 @@
+<div class="container-fluid py-4 px-2 px-sm-3 px-md-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header pb-0">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0">My Profile</h6>
+                        <span class="badge" [ngClass]="userRole === 'Admin' ? 'bg-gradient-dark' : 'bg-gradient-success'">
+                            {{ userRole }}
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body">
+                    @if (loading) {
+                        <div class="text-center py-5">
+                            <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+                        </div>
+                    } @else {
+                        <form [formGroup]="profileForm">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" formControlName="firstName">
+                                    @if (profileForm.controls['firstName'].invalid && profileForm.controls['firstName'].touched) {
+                                        <small class="text-danger">First name is required.</small>
+                                    }
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" formControlName="lastName">
+                                    @if (profileForm.controls['lastName'].invalid && profileForm.controls['lastName'].touched) {
+                                        <small class="text-danger">Last name is required.</small>
+                                    }
+                                </div>
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <label class="form-label">Email</label>
+                                    <input type="email" class="form-control" formControlName="email"
+                                        style="background-color: #f0f0f0; cursor: not-allowed;">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label">Role</label>
+                                    <input type="text" class="form-control" formControlName="role"
+                                        style="background-color: #f0f0f0; cursor: not-allowed;">
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Address</label>
+                                <input type="text" class="form-control" formControlName="address">
+                            </div>
+
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <label class="form-label">Auth Method</label>
+                                    <input type="text" class="form-control" formControlName="authMethod"
+                                        style="background-color: #f0f0f0; cursor: not-allowed;">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Created At</label>
+                                    <input type="text" class="form-control" formControlName="createdAt"
+                                        style="background-color: #f0f0f0; cursor: not-allowed;">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label">Updated At</label>
+                                    <input type="text" class="form-control" formControlName="updatedAt"
+                                        style="background-color: #f0f0f0; cursor: not-allowed;">
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end mt-4">
+                                <button class="btn bg-gradient-primary" [disabled]="saving || profileForm.invalid"
+                                    (click)="onSave()">
+                                    @if (saving) {
+                                        <i class="fa fa-spinner fa-spin me-2"></i>
+                                    }
+                                    Save Changes
+                                </button>
+                            </div>
+                        </form>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

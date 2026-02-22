@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { SettingService } from '../../../shared/services/setting.service';
 import { AuthService } from '../../auth/services/auth.service';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 export interface User {
   uid: string;
   firstName: string;
@@ -20,7 +20,7 @@ export interface User {
 @Component({
   selector: 'app-topbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterModule],
   templateUrl: './topbar.component.html',
   styleUrl: './topbar.component.scss'
 })

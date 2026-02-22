@@ -11,4 +11,21 @@ export function getFirestore() {
   return firebase.firestore();
 }
 
+let authInitialized = false;
+const authReadyPromise = new Promise<any>((resolve) => {
+  const unsubscribe = firebase.auth().onAuthStateChanged((user) => {
+    authInitialized = true;
+    unsubscribe();
+    resolve(user);
+  });
+});
+
+export function waitForAuth(): Promise<any> {
+  // If auth already initialized, return current user immediately
+  if (authInitialized) {
+    return Promise.resolve(firebase.auth().currentUser);
+  }
+  return authReadyPromise;
+}
+
 export { firebase };
