@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 import { ChatService, Conversation, ChatMessage } from '../../../shared/services/chat.service';
 
@@ -25,7 +26,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<void>();
   private otherUserCache: Map<string, any> = new Map();
 
-  constructor(private chatService: ChatService) {}
+  private pendingConvId: string | null = null;
+
+  constructor(private chatService: ChatService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
     const profile = this.getProfile();
@@ -36,6 +39,17 @@ export class MessagesComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Read conversationId from query param
+    this.activatedRoute.queryParams
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(params => {
+        this.pendingConvId = params['id'] || null;
+        // If conversations already loaded, auto-select
+        if (this.pendingConvId && this.conversations.length) {
+          this.autoSelectConversation(this.pendingConvId);
+        }
+      });
+
     this.chatService.getMyConversations(this.currentUid)
       .pipe(takeUntil(this.destroy$))
       .subscribe(async (conversations) => {
@@ -43,9 +57,9 @@ export class MessagesComponent implements OnInit, OnDestroy {
           const otherUid = conv.buyerId === this.currentUid ? conv.sellerId : conv.buyerId;
           if (!this.otherUserCache.has(otherUid)) {
             try {
-              const profile = await this.chatService.getUserProfile(otherUid)
+              const userProfile = await this.chatService.getUserProfile(otherUid)
                 .pipe(takeUntil(this.destroy$)).toPromise();
-              this.otherUserCache.set(otherUid, profile);
+              this.otherUserCache.set(otherUid, userProfile);
             } catch {}
           }
           const cached = this.otherUserCache.get(otherUid);
@@ -56,7 +70,19 @@ export class MessagesComponent implements OnInit, OnDestroy {
         }
         this.conversations = conversations;
         this.loading = false;
+
+        // Auto-select conversation from query param
+        if (this.pendingConvId) {
+          this.autoSelectConversation(this.pendingConvId);
+        }
       });
+  }
+
+  private autoSelectConversation(convId: string): void {
+    const conv = this.conversations.find(c => c.id === convId);
+    if (conv && this.selectedConversation?.id !== convId) {
+      this.selectConversation(conv);
+    }
   }
 
   private getProfile(): any {

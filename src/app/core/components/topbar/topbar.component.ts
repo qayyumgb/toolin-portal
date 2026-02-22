@@ -99,7 +99,8 @@ export class TopbarComponent implements OnInit, OnDestroy {
       getFirestore().doc(`users/${uid}/notifications/${n.id}`).update({ isSeen: true });
     }
     this.showNotificationDropdown = false;
-    this.route.navigate(['/messages']);
+    const convId = n.payload?.conversationId;
+    this.route.navigate(['/messages'], convId ? { queryParams: { id: convId } } : {});
   }
 
   formatNotificationTime(timestamp: any): string {
