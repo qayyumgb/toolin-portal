@@ -102,7 +102,7 @@ body {
 
 .heading-font {
     font-family: "Saira Condensed", sans-serif;
-    
+
 
 }
 
@@ -25906,8 +25906,9 @@ alert.common-alert {
     font-size: 12px;
     padding: 5px 1rem;
     border-radius: 5px;
+    white-space: nowrap;
     color: white;
-    max-width: 110px;
+    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
 

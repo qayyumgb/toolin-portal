@@ -2,241 +2,447 @@
     <span>Images uploaded successfully!</span>
 </alert>
 <alert type="danger" *ngIf="isUploadfailed" [dismissOnTimeout]="2000">
-    <span>uploading failed please try again!</span>
+    <span>Uploading failed, please try again!</span>
 </alert>
-<div class="container-fluid mt-4 ">
-    <div class="card ">
+
+<div class="container-fluid mt-4">
+    <div class="card">
         <div class="card-header px-lg-5 pt-lg-4">
-
-            @if(isEditForm){
-            <h4 class="pt-3 px-4 heading-font ">Edit Tool</h4>
-            }
-            @else{
-            <h4 class="pt-3 px-4 heading-font ">Add Tool</h4>
-            }
-
+            <h4 class="pt-3 px-4 heading-font">{{ isEditForm ? 'Edit Tool' : 'Add Tool' }}</h4>
         </div>
         <div class="card-body px-lg-5 pt-1">
             <div class="row justify-content-center">
+                <!-- ========== STEPPER SIDEBAR ========== -->
                 <div class="col-lg-3">
-                    <ul class=" step-file">
-                        @for (item of data; track $index) {
-                        <li class="stepper-item d-flex align-items-center gap-3" [class.active]="formtab > $index">
+                    <ul class="step-file">
+                        @for (item of steps; track item.id) {
+                        <li class="stepper-item d-flex align-items-center gap-3"
+                            [class.completed]="isStepCompleted(item.id) && !isStepCurrent(item.id)"
+                            [class.current]="isStepCurrent(item.id)"
+                            [class.upcoming]="!isStepCompleted(item.id) && !isStepCurrent(item.id)"
+                            [class.clickable]="isStepClickable(item.id)"
+                            (click)="onStepClick(item.id)">
                             <span class="stepper-icon">
-                                <i [class]="'fa ' +item.icon"></i>
+                                @if (isStepCompleted(item.id) && !isStepCurrent(item.id)) {
+                                    <i class="fa fa-check"></i>
+                                } @else {
+                                    <i [class]="'fa ' + item.icon"></i>
+                                }
                             </span>
                             <div class="stepper-content">
-                                <h6 class="stepper-name">{{item.name}}</h6>
-                                <p class="stepper-detail">{{item.detail}}</p>
+                                <h6 class="stepper-name">{{ item.name }}</h6>
+                                <p class="stepper-detail">{{ item.detail }}</p>
                             </div>
                         </li>
                         }
-
-
                     </ul>
                 </div>
+
+                <!-- ========== FORM CONTENT ========== -->
                 <div class="col-lg-9">
                     <form class="row" [formGroup]="newToolForm">
-                        <div class="general" *ngIf="formtab == 1">
-                            <input type="hidden" name="" formControlName="id">
+
+                        <!-- ===== STEP 1: Basic Info ===== -->
+                        <div class="step-content" [class.d-none]="formtab !== 1">
+                            <input type="hidden" formControlName="id">
 
                             <div class="form-group">
-                                <label for="" class=" fw-bold"> Name</label>
+                                <label class="fw-bold">Tool Name <span class="text-danger">*</span></label>
                                 <input type="text" formControlName="name"
-                                    [ngClass]="{'border-danger':newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched }"
-                                    class="form-control form-control-lg rounded-0 ">
+                                    [ngClass]="{'border-danger': newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched}"
+                                    class="form-control form-control-lg rounded-0"
+                                    placeholder="Enter tool name">
+                                @if (newToolForm.get('name')?.invalid && newToolForm.get('name')?.touched) {
+                                    <small class="text-danger">Tool name is required.</small>
+                                }
                             </div>
 
                             <div class="row">
-                                <!-- [class]="subCategory.length>0?'col-lg-6':'col-lg-12'" -->
-                                <div [class]="subCategory.length>0 || selectedSubCategory.length > 0?'col-lg-6':'col-lg-12'">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Brand <span class="text-danger">*</span></label>
+                                        <input type="text" formControlName="brand"
+                                            class="form-control form-control-lg rounded-0"
+                                            [ngClass]="{'border-danger': newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched}"
+                                            placeholder="e.g. DeWalt, Caterpillar">
+                                        @if (newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched) {
+                                            <small class="text-danger">Brand is required.</small>
+                                        }
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Model <span class="text-danger">*</span></label>
+                                        <input type="text" formControlName="model"
+                                            [ngClass]="{'border-danger': newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched}"
+                                            class="form-control form-control-lg rounded-0"
+                                            placeholder="e.g. DW735, 320F">
+                                        @if (newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched) {
+                                            <small class="text-danger">Model is required.</small>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div [class]="subCategory.length > 0 || selectedSubCategory.length > 0 ? 'col-lg-6' : 'col-lg-12'">
                                     <div class="form-group" *ngIf="category">
-                                        <label for="" class=" fw-bold">Categories</label>
+                                        <label class="fw-bold">Category <span class="text-danger">*</span></label>
                                         <ng-multiselect-dropdown [placeholder]="'Select Category'"
                                             [settings]="dropdownSettings" [data]="category"
                                             [(ngModel)]="selectedCategory" [ngModelOptions]="{standalone: true}"
                                             class="tool-multi-select"
-                                            [ngClass]="{'not-selected-category':!iscategorySelected}"
+                                            [ngClass]="{'not-selected-category': !iscategorySelected}"
                                             (onSelect)="onItemSelect($event)" (onDeSelect)="onItemDeSelect($event)"
                                             (onSelectAll)="onSelectAll($event)">
-
                                         </ng-multiselect-dropdown>
-
-
+                                        @if (!iscategorySelected) {
+                                            <small class="text-danger">At least one category is required.</small>
+                                        }
                                     </div>
-
                                 </div>
                                 <div class="col-lg-6">
-                                    @if (subCategory.length>0 || selectedSubCategory.length > 0) {
+                                    @if (subCategory.length > 0 || selectedSubCategory.length > 0) {
                                     <div class="form-group" *ngIf="category">
-                                        <label for="" class=" fw-bold">Sub Categories</label>
-                                        <ng-multiselect-dropdown [placeholder]="'Select Category'"
+                                        <label class="fw-bold">Sub Category <span class="text-danger">*</span></label>
+                                        <ng-multiselect-dropdown [placeholder]="'Select Sub-category'"
                                             [settings]="dropdownSettings" [data]="subCategory"
                                             [(ngModel)]="selectedSubCategory" [ngModelOptions]="{standalone: true}"
                                             class="tool-multi-select"
-                                            [ngClass]="{'not-selected-category':!isSubcategorySelected}"
+                                            [ngClass]="{'not-selected-category': !isSubcategorySelected}"
                                             (onSelect)="onSubCatSelect($event)" (onDeSelect)="onSubCateDeSelect($event)"
                                             (onSelectAll)="onSelectAll($event, false)">
                                         </ng-multiselect-dropdown>
+                                        @if (!isSubcategorySelected) {
+                                            <small class="text-danger">At least one sub-category is required.</small>
+                                        }
                                     </div>
                                     }
-
                                 </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="" class=" fw-bold">Brand Name</label>
-
-                                        <input type="text" formControlName="brand"
-                                            class="form-control form-control-lg rounded-0 "
-                                            [ngClass]="{'border-danger':newToolForm.get('brand')?.invalid && newToolForm.get('brand')?.touched  }">
-
-                                    </div>
-                                </div>
-                                <div class="col-lg-6">
-                                    <div class="form-group">
-                                        <label for="" class=" fw-bold"> Model</label>
-                                        <input type="text" formControlName="model"
-                                            [ngClass]="{'border-danger':newToolForm.get('model')?.invalid && newToolForm.get('model')?.touched }"
-                                            class="form-control form-control-lg rounded-0 ">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="" class=" fw-bold"> Location</label>
-                                <input type="text" formControlName="_geoloc" #addresstext
-                                    placeholder="Search by location" class="form-control form-control-lg rounded-0 "
-                                    [ngClass]="{'border-danger':newToolForm.get('_geoloc')?.invalid && newToolForm.get('_geoloc')?.touched }" />
                             </div>
                         </div>
 
-                        <div class="description" *ngIf="formtab == 2">
+                        <!-- ===== STEP 2: Description & Location ===== -->
+                        <div class="step-content" [class.d-none]="formtab !== 2">
                             <div class="form-group">
-                                <label for="" class=" fw-bold">Description</label>
-                                <app-editor-component [html]="newToolForm.get('description')?.value" [height]="270"
-                                    [whenInvalid]="newToolForm.get('description')?.invalid && newToolForm.get('description')?.touched ||newToolForm.get('description')?.value.length <10  && newToolForm.get('description')?.touched  "
-                                    (htmlChange)="getModal($event)"></app-editor-component>
+                                <label class="fw-bold">Description <span class="text-danger">*</span></label>
+                                <app-editor-component
+                                    [html]="newToolForm.get('description')?.value"
+                                    [height]="220"
+                                    [whenInvalid]="newToolForm.get('description')?.invalid && newToolForm.get('description')?.touched"
+                                    (htmlChange)="getModal($event)">
+                                </app-editor-component>
+                                @if (newToolForm.get('description')?.invalid && newToolForm.get('description')?.touched) {
+                                    <small class="text-danger">Description is required.</small>
+                                }
+                            </div>
 
+                            <div class="form-group">
+                                <label class="fw-bold">Location <span class="text-danger">*</span></label>
+                                <div class="location-input-wrapper">
+                                    <i class="fa fa-map-marker-alt location-icon"></i>
+                                    <input type="text" formControlName="streetAddress" #addresstext
+                                        placeholder="Start typing to search for a location..."
+                                        class="form-control form-control-lg location-input"
+                                        [ngClass]="{'border-danger': isLocationTouched && !(lat && lng)}"
+                                        autocomplete="off">
+                                    @if (newToolForm.get('streetAddress')?.value && !(lat && lng)) {
+                                        <i class="fa fa-spinner fa-spin location-status location-status--loading"></i>
+                                    }
+                                    @if (lat && lng) {
+                                        <i class="fa fa-check-circle location-status location-status--ok"></i>
+                                    }
+                                </div>
+                                @if (isLocationTouched && !(lat && lng)) {
+                                    <small class="text-danger">Please select a valid location from the dropdown.</small>
+                                }
+                                @if (lat && lng) {
+                                    <small class="text-muted">Location selected successfully.</small>
+                                }
                             </div>
                         </div>
 
-                        <div class="media" *ngIf="formtab == 3">
+                        <!-- ===== STEP 3: Media ===== -->
+                        <div class="step-content" [class.d-none]="formtab !== 3">
                             <div class="form-group">
-                                <!-- <img [src]="previewUrl" *ngIf="previewUrl" alt="Image Preview" style="width: 50px; height: 50px; object-fit: cover;"  /> -->
-                                <div class="d-flex gap-3 flex image-preview">
+                                <div class="d-flex gap-3 flex-wrap image-preview mb-3">
                                     @for (item of previewUrls; track $index) {
-
                                     <div class="image-box">
-                                        <span (click)="removeImage(item)">
+                                        <span (click)="removeImage($index)">
                                             <i class="fa fa-times"></i>
                                         </span>
-                                        <img [src]="item" *ngIf="previewUrls.length" alt="Image Preview" />
+                                        <img [src]="item" alt="Image Preview" />
                                     </div>
                                     }
-                                    @if(uploading){
-                                    <strong>Uploading...</strong>
+                                    @if (uploading) {
+                                    <strong class="d-flex align-items-center">Uploading...</strong>
                                     }
                                 </div>
-                                <label for="" class=" fw-bold">Tool Media</label>
 
+                                <label class="fw-bold mb-2">Tool Media <span class="text-danger">*</span></label>
                                 <input type="file" multiple id="toolMedia" [disabled]="isLoading"
-                                    class="rounded-0 d-none " (change)="onFileChange($event)">
+                                    class="rounded-0 d-none" (change)="onFileChange($event)">
                                 <label for="toolMedia" class="upload-media"
-                                    [ngClass]="{'border-danger bg-light-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">
-                                    <div class="">
+                                    [ngClass]="{'border-danger bg-light-danger': isImageTouch && !previewUrls.length}">
+                                    <div class="text-center">
                                         <i class="fa fa-cloud-upload upload-icon"
-                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }"></i>
+                                            [ngClass]="{'text-danger': isImageTouch && !previewUrls.length}"></i>
                                         <span class="loading" *ngIf="isLoading"></span>
-
                                         <h6 class="upload-note-title"
-                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">
-                                            @if ((selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length ) {
-
-                                            Please select at least one tool image.
-                                            }@else{
-
-                                            Drop files here or click to upload tool image.
+                                            [ngClass]="{'text-danger': isImageTouch && !previewUrls.length}">
+                                            @if (isImageTouch && !previewUrls.length) {
+                                                Please select at least one tool image.
+                                            } @else {
+                                                Drop files here or click to upload tool image.
                                             }
-
                                         </h6>
                                         <span class="upload-note"
-                                            [ngClass]="{'text-danger':(selectedFiles.length ==0 && isImageTouch) &&  !previewUrls.length }">You can
-                                            upload multiple images of tools in PNG, JPG, or JPEG format.
-
+                                            [ngClass]="{'text-danger': isImageTouch && !previewUrls.length}">
+                                            You can upload multiple images in PNG, JPG, or JPEG format.
                                         </span>
                                     </div>
                                 </label>
                             </div>
                         </div>
-                        <div class="price" *ngIf="formtab == 4">
-                            <div class="other-wrapper2">
-                                <div class="form-group currency-input">
-                                    <label for="" class=" fw-bold">Daily Price</label>
-                                    <input type="number" formControlName="priceDaily"
-                                        [ngClass]="{'border-danger':newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched }"
-                                        class="form-control  form-control-lg rounded-0 ">
+
+                        <!-- ===== STEP 4: Pricing & Availability ===== -->
+                        <div class="step-content" [class.d-none]="formtab !== 4">
+                            <h6 class="fw-bold mb-3">Pricing</h6>
+                            <div class="row">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Daily Price <span class="text-danger">*</span></label>
+                                        <input type="number" formControlName="priceDaily"
+                                            [ngClass]="{'border-danger': newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched}"
+                                            class="form-control form-control-lg rounded-0"
+                                            placeholder="0.00">
+                                        @if (newToolForm.get('priceDaily')?.invalid && newToolForm.get('priceDaily')?.touched) {
+                                            <small class="text-danger">Daily price must be greater than 0.</small>
+                                        }
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="" class=" fw-bold">Weely Price</label>
-                                    <input type="number" formControlName="priceWeekly"
-                                        [ngClass]="{'border-danger':newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched }"
-                                        class="form-control form-control-lg rounded-0 ">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Weekly Price <span class="text-danger">*</span></label>
+                                        <input type="number" formControlName="priceWeekly"
+                                            [ngClass]="{'border-danger': newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched}"
+                                            class="form-control form-control-lg rounded-0"
+                                            placeholder="0.00">
+                                        @if (newToolForm.get('priceWeekly')?.invalid && newToolForm.get('priceWeekly')?.touched) {
+                                            <small class="text-danger">Weekly price must be greater than 0.</small>
+                                        }
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="" class=" fw-bold">Monthly Price</label>
-                                    <input type="number" formControlName="priceMonthly"
-                                        [ngClass]="{'border-danger':newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched }"
-                                        class="form-control form-control-lg rounded-0 ">
+                                <div class="col-lg-4">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Monthly Price <span class="text-danger">*</span></label>
+                                        <input type="number" formControlName="priceMonthly"
+                                            [ngClass]="{'border-danger': newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched}"
+                                            class="form-control form-control-lg rounded-0"
+                                            placeholder="0.00">
+                                        @if (newToolForm.get('priceMonthly')?.invalid && newToolForm.get('priceMonthly')?.touched) {
+                                            <small class="text-danger">Monthly price must be greater than 0.</small>
+                                        }
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label for="" class=" fw-bold">Market Value</label>
-                                    <input type="text" formControlName="marketValue"
-                                        class="form-control form-control-lg rounded-0 ">
+                            </div>
+
+                            <div class="form-group">
+                                <label class="fw-bold">Market Value</label>
+                                <input type="text" formControlName="marketValue"
+                                    class="form-control form-control-lg rounded-0"
+                                    placeholder="Estimated market value">
+                            </div>
+
+                            <h6 class="fw-bold mb-3 mt-4">Available Hours</h6>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Available After (hour)</label>
+                                        <input type="number" formControlName="availableAfter"
+                                            class="form-control form-control-lg rounded-0"
+                                            min="0" max="23" placeholder="e.g. 8">
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="form-group">
+                                        <label class="fw-bold">Available Before (hour)</label>
+                                        <input type="number" formControlName="availableBefore"
+                                            class="form-control form-control-lg rounded-0"
+                                            min="0" max="23" placeholder="e.g. 18">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h6 class="fw-bold mb-3 mt-4">Options</h6>
+                            <div class="toggle-grid">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isDeliveryAvailable" formControlName="isDeliveryAvailable">
+                                    <label class="form-check-label fw-bold" for="isDeliveryAvailable">Delivery Available</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="hasInsurance" formControlName="hasInsurance">
+                                    <label class="form-check-label fw-bold" for="hasInsurance">Has Insurance</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isOperatorAvailable" formControlName="isOperatorAvailable">
+                                    <label class="form-check-label fw-bold" for="isOperatorAvailable">Operator Available</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isOwnerApproved" formControlName="isOwnerApproved">
+                                    <label class="form-check-label fw-bold" for="isOwnerApproved">Owner Approved</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isAvailable" formControlName="isAvailable">
+                                    <label class="form-check-label fw-bold" for="isAvailable">Available for Rent</label>
+                                </div>
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" id="isPublished" formControlName="isPublished">
+                                    <label class="form-check-label fw-bold" for="isPublished">Published (visible to renters)</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="other" *ngIf="formtab == 5">
-                            <div class="other-wrapper">
-                                <div class="form-group mb-0">
-                                    <input type="checkbox" id="hasInsurance" formControlName="hasInsurance"
-                                        class="rounded-0 d-none custom-check-input">
-                                    <label for="hasInsurance" class=" custom-check-label fw-bold">
-                                        <i class="fa fa-ticket"></i>
-                                        <span>Do you have insurance for this tool?</span>
-                                    </label>
+
+                        <!-- ===== STEP 5: Review & Submit ===== -->
+                        <div class="step-content" [class.d-none]="formtab !== 5">
+
+                            <!-- Basic Info Card -->
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <h6 class="fw-bold mb-0">Basic Info</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="goToStep(1)">
+                                        <i class="fa fa-pencil-alt"></i> Edit
+                                    </button>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <input type="checkbox" id="isOperatorAvailable"
-                                        formControlName="isOperatorAvailable"
-                                        class="rounded-0 d-none custom-check-input">
-                                    <label for="isOperatorAvailable" class=" custom-check-label fw-bold">
-                                        <i class="fa-calendar-check fa"></i>
-                                        <span>
-                                            Is operator available for this tool?
-                                        </span>
-                                    </label>
+                                <div class="review-card-body">
+                                    <div class="row">
+                                        <div class="col-lg-4">
+                                            <p class="review-label">Tool Name</p>
+                                            <p class="review-value">{{ newToolForm.get('name')?.value || '---' }}</p>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="review-label">Brand</p>
+                                            <p class="review-value">{{ newToolForm.get('brand')?.value || '---' }}</p>
+                                        </div>
+                                        <div class="col-lg-4">
+                                            <p class="review-label">Model</p>
+                                            <p class="review-value">{{ newToolForm.get('model')?.value || '---' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-2">
+                                        <div class="col-lg-6">
+                                            <p class="review-label">Categories</p>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @for (cat of selectedCategory; track cat.item_id) {
+                                                    <span class="tool-badge">{{ cat.item_text }}</span>
+                                                }
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6">
+                                            <p class="review-label">Sub-categories</p>
+                                            <div class="d-flex flex-wrap gap-1">
+                                                @for (sub of selectedSubCategory; track sub.item_id) {
+                                                    <span class="tool-badge">{{ sub.item_text }}</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <input type="checkbox" id="isOwnerApproved" formControlName="isOwnerApproved"
-                                        class="rounded-0 d-none custom-check-input">
-                                    <label for="isOwnerApproved" class=" custom-check-label fw-bold">
-                                        <i class="fa fa-zap"></i>
-                                        <span>
-                                            Is owner approved for this tool?
-                                        </span>
-                                    </label>
+                            </div>
+
+                            <!-- Description & Location Card -->
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <h6 class="fw-bold mb-0">Description & Location</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="goToStep(2)">
+                                        <i class="fa fa-pencil-alt"></i> Edit
+                                    </button>
                                 </div>
-                                <div class="form-group mb-0">
-                                    <input type="checkbox" id="isAvailable" formControlName="isAvailable"
-                                        class="rounded-0 d-none custom-check-input">
-                                    <label for="isAvailable" class=" custom-check-label fw-bold">
-                                        <i class="fa fa-bus"></i>
-                                        <span>
-                                            Is this tool available?
-                                        </span>
-                                    </label>
+                                <div class="review-card-body">
+                                    <p class="review-label">Description</p>
+                                    <div class="review-description" [innerHTML]="newToolForm.get('description')?.value"></div>
+                                    <p class="review-label mt-3">Location</p>
+                                    <p class="review-value">
+                                        <i class="fa fa-map-marker-alt me-1"></i>
+                                        {{ newToolForm.get('streetAddress')?.value || '---' }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Media Card -->
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <h6 class="fw-bold mb-0">Media</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="goToStep(3)">
+                                        <i class="fa fa-pencil-alt"></i> Edit
+                                    </button>
+                                </div>
+                                <div class="review-card-body">
+                                    <div class="d-flex gap-2 flex-wrap review-images">
+                                        @for (img of previewUrls; track $index) {
+                                            <div class="review-image-box">
+                                                <img [src]="img" alt="Tool image {{ $index + 1 }}">
+                                            </div>
+                                        }
+                                        @if (previewUrls.length === 0) {
+                                            <p class="text-muted mb-0">No images uploaded.</p>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pricing & Availability Card -->
+                            <div class="review-card">
+                                <div class="review-card-header">
+                                    <h6 class="fw-bold mb-0">Pricing & Availability</h6>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" (click)="goToStep(4)">
+                                        <i class="fa fa-pencil-alt"></i> Edit
+                                    </button>
+                                </div>
+                                <div class="review-card-body">
+                                    <div class="row">
+                                        <div class="col-lg-3">
+                                            <p class="review-label">Daily</p>
+                                            <p class="review-value fw-bold">${{ newToolForm.get('priceDaily')?.value }}</p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="review-label">Weekly</p>
+                                            <p class="review-value fw-bold">${{ newToolForm.get('priceWeekly')?.value }}</p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="review-label">Monthly</p>
+                                            <p class="review-value fw-bold">${{ newToolForm.get('priceMonthly')?.value }}</p>
+                                        </div>
+                                        <div class="col-lg-3">
+                                            <p class="review-label">Market Value</p>
+                                            <p class="review-value">{{ newToolForm.get('marketValue')?.value || '---' }}</p>
+                                        </div>
+                                    </div>
+                                    <div class="row mt-3">
+                                        <div class="col-lg-6">
+                                            <p class="review-label">Available Hours</p>
+                                            <p class="review-value">
+                                                {{ newToolForm.get('availableAfter')?.value }}:00 — {{ newToolForm.get('availableBefore')?.value }}:00
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <div class="mt-3">
+                                        <p class="review-label">Options</p>
+                                        <div class="d-flex flex-wrap gap-2">
+                                            <span class="badge" [class.bg-success]="newToolForm.get('isDeliveryAvailable')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('isDeliveryAvailable')?.value">Delivery</span>
+                                            <span class="badge" [class.bg-success]="newToolForm.get('hasInsurance')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('hasInsurance')?.value">Insurance</span>
+                                            <span class="badge" [class.bg-success]="newToolForm.get('isOperatorAvailable')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('isOperatorAvailable')?.value">Operator</span>
+                                            <span class="badge" [class.bg-success]="newToolForm.get('isOwnerApproved')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('isOwnerApproved')?.value">Owner Approved</span>
+                                            <span class="badge" [class.bg-success]="newToolForm.get('isAvailable')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('isAvailable')?.value">Available</span>
+                                            <span class="badge" [class.bg-success]="newToolForm.get('isPublished')?.value"
+                                                [class.bg-secondary]="!newToolForm.get('isPublished')?.value">Published</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -245,47 +451,35 @@
                 </div>
             </div>
         </div>
+
+        <!-- ========== FOOTER BUTTONS ========== -->
         <div class="card-footer pt-0 px-lg-5 pb-lg-5">
-            <div class="d-flex justify-content-end gap-1">
-                <button [disabled]="isLoading" *ngIf="formtab>1" class="btn btn-primary mb-0"
-                    (click)="changeTab(formtab-1)">
-                    <i class="fa fa-angle-double-left"></i> &nbsp;
-
-                    back
-                </button>
-                <button [disabled]="isLoading " *ngIf="formtab< 5" class="btn btn-primary mb-0"
-                    (click)="changeTab(formtab+1)">Next &nbsp;
-
-                    <i class="fa fa-angle-double-right"></i>
-                    @if (isLoading) {
-                    <div class="loader"></div>
+            <div class="d-flex justify-content-between">
+                <div>
+                    @if (formtab > 1) {
+                        <button [disabled]="isLoading" class="btn btn-secondary mb-0"
+                            (click)="goToStep(formtab - 1)">
+                            <i class="fa fa-angle-double-left"></i> &nbsp; Back
+                        </button>
                     }
-
-                </button>
-
-                @if(isEditForm){
-                <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0"
-                    (click)="AddToolHandler()">
-
-                    <i class="fa fa-saves"></i> &nbsp;
-                    Update
-                    @if (isLoading) {
-                    <div class="loader"></div>
+                </div>
+                <div class="d-flex gap-1">
+                    @if (formtab < 5) {
+                        <button [disabled]="isLoading" class="btn btn-primary mb-0"
+                            (click)="goToStep(formtab + 1)">
+                            Next &nbsp; <i class="fa fa-angle-double-right"></i>
+                            @if (isLoading) { <div class="loader"></div> }
+                        </button>
                     }
-                </button>
-                }
-                @else{
-                <button [disabled]="isLoading" *ngIf="formtab == 5" class="btn btn-primary mb-0"
-                    (click)="AddToolHandler()">
-
-                    <i class="fa fa-saves"></i> &nbsp;
-                    save
-                    @if (isLoading) {
-                    <div class="loader"></div>
+                    @if (formtab === 5) {
+                        <button [disabled]="isLoading" class="btn btn-primary mb-0"
+                            (click)="AddToolHandler()">
+                            <i class="fa fa-save"></i> &nbsp;
+                            {{ isEditForm ? 'Update' : 'Save' }}
+                            @if (isLoading) { <div class="loader"></div> }
+                        </button>
                     }
-                </button>
-                }
-
+                </div>
             </div>
         </div>
     </div>
